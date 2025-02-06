@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_app/theme/tema_data.dart';
 import 'static/navigation_route.dart';
 import 'screens/main/main_screen.dart';
 import 'screens/detail/detail_screen.dart';
@@ -15,11 +16,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  bool _isDarkMode = false; // Track the dark mode state
+  bool _isDarkMode = false;
 
   void _toggleTheme() {
     setState(() {
-      _isDarkMode = !_isDarkMode; // Toggle theme
+      _isDarkMode = !_isDarkMode;
     });
   }
 
@@ -28,17 +29,14 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Restaurant App',
-      themeMode: _isDarkMode
-          ? ThemeMode.dark
-          : ThemeMode.light, // Switch theme based on state
-      theme: ThemeData.light(), // Light theme
-      darkTheme: ThemeData.dark(), // Dark theme
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      theme: TemaData.lightTheme,
+      darkTheme: TemaData.darkTheme,
       initialRoute: NavigationRoute.mainRoute.name,
       routes: {
         NavigationRoute.mainRoute.name: (context) => MainScreen(
-              onThemeSwitch:
-                  _toggleTheme, // Pass the toggle function to MainScreen
-              isDarkMode: _isDarkMode, // Pass current theme mode
+              onThemeSwitch: _toggleTheme,
+              isDarkMode: _isDarkMode,
             ),
         NavigationRoute.detailRoute.name: (context) => const DetailScreen(),
       },

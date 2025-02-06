@@ -21,7 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ? Icons.wb_sunny
                 : Icons.nightlight_round,
           ),
-          onPressed: onThemeSwitch, // Call the theme toggle function
+          onPressed: onThemeSwitch, 
         ),
       ],
     );
@@ -29,5 +29,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight); // Standard AppBar height
+      const Size.fromHeight(kToolbarHeight);
 }

@@ -1,94 +1,75 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/model/restaurant_list_response.dart';
+import 'package:restaurant_app/screens/detail/sliver/sliver_list.dart';
 import 'package:restaurant_app/services/api_service.dart';
+import 'package:restaurant_app/model/detail_restaurant.dart';
+import 'package:restaurant_app/widgets/lottie_loading.dart';
 
-class BodyDetail extends StatelessWidget {
-  final Restaurant restaurant;
+class BodyDetail extends StatefulWidget {
+  final String restaurantId;
 
-  const BodyDetail({super.key, required this.restaurant});
+  const BodyDetail({super.key, required this.restaurantId});
+
+  @override
+  _BodyDetailState createState() => _BodyDetailState();
+}
+
+class _BodyDetailState extends State<BodyDetail> {
+  late Future<DetailRestaurant> _restaurantDetail;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchRestaurantDetail();
+  }
+
+  void _fetchRestaurantDetail() {
+    setState(() {
+      _restaurantDetail =
+          ApiServices().getRestaurantDetails(widget.restaurantId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final String imageUrl =
-        ApiServices().getImageUrl(restaurant.pictureId, 'large');
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: FutureBuilder<DetailRestaurant>(
+        future: _restaurantDetail,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LottieLoading();
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData) {
+            return const Center(child: Text('No restaurant details found.'));
+          } else {
+            var restaurant = snapshot.data!;
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (context) {
-                    return Dialog(
-                      backgroundColor: Colors.transparent,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Hero(
-                          tag: 'restaurant-${restaurant.id}',
-                          child: Center(
-                            child: Image.network(
-                              imageUrl,
-                              fit: BoxFit.contain,
-                              width: double.infinity,
-                              height: MediaQuery.of(context).size.height * 0.8,
-                            ),
-                          ),
-                        ),
+            return CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 300,
+                  automaticallyImplyLeading: false,
+                  pinned: false,
+                  floating: false,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Hero(
+                      tag: 'restaurant-${restaurant.id}',
+                      child: Image.network(
+                        ApiServices()
+                            .getImageUrl(restaurant.pictureId, 'large'),
+                        width: double.infinity,
+                        fit: BoxFit.cover,
                       ),
-                    );
-                  },
-                );
-              },
-              child: Hero(
-                tag: 'restaurant-${restaurant.id}',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.network(
-                    imageUrl,
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              restaurant.name,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Location: ${restaurant.city}',
-              style: const TextStyle(fontSize: 18),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                const Icon(Icons.star, color: Colors.orange),
-                Text('${restaurant.rating}',
-                    style: const TextStyle(fontSize: 18)),
+                SliverListWidget(restaurant: restaurant),
               ],
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Description:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              restaurant.description,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }

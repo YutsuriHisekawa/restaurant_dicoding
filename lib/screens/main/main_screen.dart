@@ -24,6 +24,10 @@ class _MainScreenState extends State<MainScreen> {
     const FavoriteScreen(),
   ];
 
+  String get _title {
+    return _currentIndex == 0 ? 'Restaurant List' : 'Favorite List';
+  }
+
   void _onItemTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -34,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Restaurant List',
+        title: _title,
         onThemeSwitch: widget.onThemeSwitch,
         isDarkMode: widget.isDarkMode,
       ),

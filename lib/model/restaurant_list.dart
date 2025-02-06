@@ -4,6 +4,10 @@ class RestaurantListResponse {
   RestaurantListResponse({required this.restaurants});
 
   factory RestaurantListResponse.fromJson(Map<String, dynamic> json) {
+    if (json['restaurants'] == null) {
+      return RestaurantListResponse(restaurants: []);
+    }
+
     var list = json['restaurants'] as List;
     List<Restaurant> restaurantList =
         list.map((i) => Restaurant.fromJson(i)).toList();

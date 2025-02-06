@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/services/api_service.dart';
-import 'package:restaurant_app/model/restaurant_list_response.dart';
+import 'package:restaurant_app/model/restaurant_list.dart';
 import 'package:restaurant_app/static/navigation_route.dart';
+import 'package:restaurant_app/widgets/lottie_loading.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,52 +22,63 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<RestaurantListResponse>(
-      future: _restaurantList,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.restaurants.isEmpty) {
-          return const Center(child: Text('No restaurants found.'));
-        } else {
-          var restaurants = snapshot.data!.restaurants;
-          return ListView.builder(
-            itemCount: restaurants.length,
-            itemBuilder: (context, index) {
-              var restaurant = restaurants[index];
-              return ListTile(
-                leading: Hero(
-                  tag: 'restaurant-${restaurant.id}',
-                  child: Image.network(
-                    ApiServices().getImageUrl(restaurant.pictureId, 'medium'),
-                    width: 50,
-                    height: 50,
-                    fit: BoxFit.cover,
+    return Scaffold(
+      body: FutureBuilder<RestaurantListResponse>(
+        future: _restaurantList,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const LottieLoading(); // Gunakan LottieLoading
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.restaurants.isEmpty) {
+            return const Center(child: Text('No restaurants found.'));
+          } else {
+            var restaurants = snapshot.data!.restaurants;
+            return ListView.builder(
+              itemCount: restaurants.length,
+              itemBuilder: (context, index) {
+                var restaurant = restaurants[index];
+                String imageUrl =
+                    ApiServices().getImageUrl(restaurant.pictureId, 'medium');
+
+                return Card(
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: Hero(
+                      tag: 'restaurant-${restaurant.id}',
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.network(
+                          imageUrl,
+                          width: 80,
+                          height: 80,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    title: Text(restaurant.name),
+                    subtitle: Text(restaurant.city),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.star, color: Colors.orange),
+                        Text('${restaurant.rating}'),
+                      ],
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        NavigationRoute.detailRoute.name,
+                        arguments: restaurant.id,
+                      );
+                    },
                   ),
-                ),
-                title: Text(restaurant.name),
-                subtitle: Text(restaurant.city),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.star, color: Colors.orange),
-                    Text('${restaurant.rating}'),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.pushNamed(
-                    context,
-                    NavigationRoute.detailRoute.name,
-                    arguments: restaurant,
-                  );
-                },
-              );
-            },
-          );
-        }
-      },
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }
