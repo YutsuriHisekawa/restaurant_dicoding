@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/favorite/favorite_screen.dart';
 import 'package:restaurant_app/screens/home/home_screen.dart';
+import 'package:restaurant_app/screens/search/search_screen.dart';
 import 'package:restaurant_app/screens/main/index_nav_provider.dart';
 import 'package:restaurant_app/widgets/custom_app_bar_widget.dart';
 import 'package:restaurant_app/widgets/custom_bottom_bar_widget.dart';
@@ -33,6 +34,9 @@ class _MainScreenState extends State<MainScreen> {
       case 1:
         appBarTitle = 'Favorite List';
         break;
+      case 2:
+        appBarTitle = 'Search Restaurant';
+        break;
       default:
         appBarTitle = 'Restaurant App';
     }
@@ -45,9 +49,13 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Consumer<IndexNavProvider>(
         builder: (context, value, child) {
-          return value.indexBottomNavBar == 1
-              ? const FavoriteScreen()
-              : const HomeScreen();
+          if (value.indexBottomNavBar == 1) {
+            return const FavoriteScreen();
+          } else if (value.indexBottomNavBar == 2) {
+            return const SearchScreen();
+          } else {
+            return const HomeScreen();
+          }
         },
       ),
       bottomNavigationBar: CustomBottomBar(

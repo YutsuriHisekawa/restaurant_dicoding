@@ -37,4 +37,16 @@ class ApiServices {
       throw Exception('Failed to load restaurant details: $e');
     }
   }
+
+  Future<RestaurantListResponse> searchRestaurant(String query) async {
+    final response = await http.get(
+      Uri.parse('https://restaurant-api.dicoding.dev/search?q=$query'),
+    );
+
+    if (response.statusCode == 200) {
+      return RestaurantListResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to search restaurants');
+    }
+  }
 }

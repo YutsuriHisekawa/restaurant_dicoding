@@ -13,6 +13,7 @@ class TemaData {
       selectedItemColor: Colors.deepOrange,
       unselectedItemColor: Colors.grey,
     ),
+    fontFamily: 'Outfit',
   );
 
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -27,5 +28,8 @@ class TemaData {
       selectedItemColor: Colors.deepOrange,
       unselectedItemColor: Color.fromARGB(255, 53, 53, 53),
     ),
+    textTheme: ThemeData.dark().textTheme.apply(
+          fontFamily: 'Outfit',
+        ),
   );
 }

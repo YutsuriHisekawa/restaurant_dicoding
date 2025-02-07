@@ -21,7 +21,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           icon: Icon(
             isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
           ),
-          onPressed: onThemeSwitch, 
+          onPressed: onThemeSwitch,
         ),
       ],
     );

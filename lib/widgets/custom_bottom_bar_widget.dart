@@ -30,6 +30,14 @@ class CustomBottomBar extends StatelessWidget {
           colors: [Colors.orange, Colors.deepOrange],
         ),
       ),
+      const TabData(
+        title: 'Search',
+        iconData: Icons.search,
+        tabColor: Colors.deepOrange,
+        tabGradient: LinearGradient(
+          colors: [Colors.orange, Colors.deepOrange],
+        ),
+      ),
     ];
 
     return CubertoBottomBar(

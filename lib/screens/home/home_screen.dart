@@ -55,8 +55,6 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             return HomeList(restaurants: restaurants);
           }
-
-          // Tampilkan pesan ketika state tidak diketahui
           return const Center(child: Text('Loading... Please wait.'));
         },
       ),
