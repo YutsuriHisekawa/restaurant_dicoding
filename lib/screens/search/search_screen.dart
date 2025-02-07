@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/provider/restaurant_list_provider.dart';
+import 'package:restaurant_app/screens/error/error_screen.dart';
 import 'package:restaurant_app/screens/search/search_field.dart';
 import 'package:restaurant_app/screens/search/serach_list.dart';
 import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
@@ -60,22 +61,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   }
 
                   if (state is RestaurantListErrorState) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            state.message,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 16),
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: provider.fetchRestaurantList,
-                            child: const Text("Coba Lagi"),
-                          ),
-                        ],
-                      ),
+                    return ErrorScreen(
+                      onRetry: provider.fetchRestaurantList,
                     );
                   }
 

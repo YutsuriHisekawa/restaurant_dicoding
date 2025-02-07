@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 
-/// Definisikan state untuk hasil restoran
 abstract class RestaurantListState {}
 
 class RestaurantListIdle extends RestaurantListState {}

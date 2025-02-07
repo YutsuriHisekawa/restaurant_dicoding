@@ -23,6 +23,7 @@ dependencies:
 
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,6 +34,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/lottie/loading.json
+    - assets/lottie/error.json
   fonts:
     - family: Outfit
       fonts:

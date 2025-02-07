@@ -3,6 +3,7 @@ import 'package:restaurant_app/provider/detail/favorite_icon_provider.dart';
 import 'package:restaurant_app/screens/detail/body_detail.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
+import 'package:restaurant_app/screens/error/error_screen.dart';
 import 'package:restaurant_app/widgets/favorite_icon_widget.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
         if (snapshot.hasError) {
           return Scaffold(
-            body: Center(child: Text('Error: ${snapshot.error}')),
+            body: ErrorScreen(
+              onRetry: () => setState(() {}),
+            ),
           );
         }
 
