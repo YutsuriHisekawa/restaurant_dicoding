@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/detail/sliver/sliver_list.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
-import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
+import 'package:restaurant_app/widgets/shimer/shimer_loading.dart';
 
 class BodyDetail extends StatefulWidget {
   final String restaurantId;
@@ -37,9 +37,9 @@ class _BodyDetailState extends State<BodyDetail> {
         future: _restaurantDetail,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LottieLoading();
+            return const ShimmerLoading();
           } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return const Center(child: Text('Oops.. Something Wrong!'));
           } else if (!snapshot.hasData) {
             return const Center(child: Text('No restaurant details found.'));
           } else {

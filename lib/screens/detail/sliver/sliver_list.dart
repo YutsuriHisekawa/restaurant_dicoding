@@ -19,25 +19,54 @@ class SliverListWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                restaurant.name,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              const SizedBox(height: 8),
               Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.star, color: Colors.orange),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${restaurant.rating}',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                  Expanded(
+                    child: Text(
+                      restaurant.name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.deepOrange,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.deepOrange.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: const Offset(2, 4),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.star, color: Colors.white, size: 18),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${restaurant.rating}',
+                          style: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
               RestaurantInfo(restaurant: restaurant),
+              const SizedBox(height: 20),
               RestaurantCategories(categories: restaurant.categories),
+              const SizedBox(height: 20),
               RestaurantMenus(menus: restaurant.menus),
+              const SizedBox(height: 20),
               CustomerReviews(customerReviews: restaurant.customerReviews),
             ],
           ),

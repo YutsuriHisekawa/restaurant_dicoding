@@ -8,27 +8,53 @@ class RestaurantInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Informasi Restoran',
-          style: Theme.of(context).textTheme.titleLarge,
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '📍 Informasi Restoran',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.deepOrange,
+                  ),
+            ),
+            const SizedBox(height: 12),
+            _infoRow(Icons.location_on, 'Alamat', restaurant.address),
+            _infoRow(Icons.location_city, 'Kota', restaurant.city),
+            _infoRow(Icons.description, 'Deskripsi', restaurant.description),
+          ],
         ),
-        const SizedBox(height: 8),
-        Text(
-          'Alamat: ${restaurant.address}',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        Text(
-          'Kota: ${restaurant.city}',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        Text(
-          'Deskripsi: ${restaurant.description}',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      ],
+      ),
+    );
+  }
+
+  Widget _infoRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: Colors.deepOrange, size: 24),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              '$label: $value',
+              style: const TextStyle(
+                fontSize: 16,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

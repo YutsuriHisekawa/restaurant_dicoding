@@ -10,7 +10,6 @@ class FavoriteIconProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Toggle the favorite state
   void toggleFavorite() {
     _isFavorite = !_isFavorite;
     notifyListeners();

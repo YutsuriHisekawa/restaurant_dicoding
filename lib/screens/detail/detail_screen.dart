@@ -5,6 +5,7 @@ import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 import 'package:restaurant_app/screens/error/error_screen.dart';
 import 'package:restaurant_app/widgets/favorite_icon_widget.dart';
+import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:provider/provider.dart';
 
@@ -26,7 +27,7 @@ class _DetailScreenState extends State<DetailScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(child: LottieLoading()),
           );
         }
 

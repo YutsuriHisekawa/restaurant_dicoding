@@ -11,13 +11,12 @@ class DetailRestaurantResponse {
 
   factory DetailRestaurantResponse.fromJson(Map<String, dynamic> json) {
     return DetailRestaurantResponse(
-      error: json['error'] ?? false, 
+      error: json['error'] ?? false,
       message: json['message'] ?? '',
       restaurant: RestaurantDetail.fromJson(json['restaurant']),
     );
   }
 
-  // Getter untuk akses data
   String get address => restaurant.address;
   String get city => restaurant.city;
   String get description => restaurant.description;
@@ -93,8 +92,11 @@ class Menus {
 
   factory Menus.fromJson(Map<String, dynamic> json) {
     return Menus(
-      foods: (json['foods'] as List).map((food) => Food.fromJson(food)).toList(),
-      drinks: (json['drinks'] as List).map((drink) => Drink.fromJson(drink)).toList(),
+      foods:
+          (json['foods'] as List).map((food) => Food.fromJson(food)).toList(),
+      drinks: (json['drinks'] as List)
+          .map((drink) => Drink.fromJson(drink))
+          .toList(),
     );
   }
 }
