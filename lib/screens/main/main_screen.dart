@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/favorite/favorite_screen.dart';
 import 'package:restaurant_app/screens/home/home_screen.dart';
-import 'package:restaurant_app/widgets/custom_app_bar.dart';
+import 'package:restaurant_app/screens/main/index_nav_provider.dart';
+import 'package:restaurant_app/widgets/custom_app_bar_widget.dart';
+import 'package:restaurant_app/widgets/custom_bottom_bar_widget.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   final VoidCallback onThemeSwitch;
@@ -18,44 +21,40 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _currentIndex = 0;
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const FavoriteScreen(),
-  ];
-
-  String get _title {
-    return _currentIndex == 0 ? 'Restaurant List' : 'Favorite List';
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final int selectedIndex =
+        context.watch<IndexNavProvider>().indexBottomNavBar;
+    String appBarTitle;
+    switch (selectedIndex) {
+      case 0:
+        appBarTitle = 'Restaurant List';
+        break;
+      case 1:
+        appBarTitle = 'Favorite List';
+        break;
+      default:
+        appBarTitle = 'Restaurant App';
+    }
+
     return Scaffold(
       appBar: CustomAppBar(
-        title: _title,
+        title: appBarTitle,
         onThemeSwitch: widget.onThemeSwitch,
         isDarkMode: widget.isDarkMode,
       ),
-      body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onItemTapped,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: 'Favorite',
-          ),
-        ],
+      body: Consumer<IndexNavProvider>(
+        builder: (context, value, child) {
+          return value.indexBottomNavBar == 1
+              ? const FavoriteScreen()
+              : const HomeScreen();
+        },
+      ),
+      bottomNavigationBar: CustomBottomBar(
+        selectedTab: selectedIndex,
+        onTabChangedListener: (position) {
+          context.read<IndexNavProvider>().setIndexBottomNavBar = position;
+        },
       ),
     );
   }

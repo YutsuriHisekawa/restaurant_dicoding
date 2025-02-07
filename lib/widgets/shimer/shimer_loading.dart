@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/screens/detail/shimer/shimer_box.dart';
+import 'package:restaurant_app/widgets/shimer/shimer_box.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerLoading extends StatelessWidget {

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback onThemeSwitch;
+  final bool isDarkMode;
 
   const CustomAppBar({
     Key? key,
     required this.title,
-    required this.onThemeSwitch, required bool isDarkMode,
+    required this.onThemeSwitch,
+    required this.isDarkMode,
   }) : super(key: key);
 
   @override
@@ -17,9 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: Icon(
-            Theme.of(context).brightness == Brightness.dark
-                ? Icons.wb_sunny
-                : Icons.nightlight_round,
+            isDarkMode ? Icons.wb_sunny : Icons.nightlight_round,
           ),
           onPressed: onThemeSwitch, 
         ),
@@ -28,6 +28,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

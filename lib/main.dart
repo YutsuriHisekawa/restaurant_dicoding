@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/provider/detail/favorite_provider.dart';
+import 'package:restaurant_app/provider/restaurant_list_provider.dart';
+import 'package:restaurant_app/screens/detail/detail_screen.dart';
+import 'package:restaurant_app/screens/main/index_nav_provider.dart';
+import 'package:restaurant_app/model/api_service.dart';
+import 'package:restaurant_app/static/navigation_route.dart';
 import 'package:restaurant_app/theme/tema_data.dart';
-import 'static/navigation_route.dart';
-import 'screens/main/main_screen.dart';
-import 'screens/detail/detail_screen.dart';
+import 'package:restaurant_app/screens/main/main_screen.dart';
+import 'package:restaurant_app/screens/favorite/favorite_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<ApiServices>(create: (_) => ApiServices()),
+        ChangeNotifierProvider(
+          create: (context) => RestaurantListProvider(
+            Provider.of<ApiServices>(context, listen: false),
+          ),
+        ),
+        ChangeNotifierProvider(create: (_) => IndexNavProvider()),
+        ChangeNotifierProvider(create: (_) => FavoriteListProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -39,6 +59,7 @@ class _MyAppState extends State<MyApp> {
               isDarkMode: _isDarkMode,
             ),
         NavigationRoute.detailRoute.name: (context) => const DetailScreen(),
+        '/favorite': (context) => const FavoriteScreen(),
       },
     );
   }

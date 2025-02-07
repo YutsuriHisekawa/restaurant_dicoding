@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/services/api_service.dart';
-import 'package:restaurant_app/model/restaurant_list.dart';
-import 'package:restaurant_app/static/navigation_route.dart';
-import 'package:restaurant_app/widgets/lottie_loading.dart';
+import 'package:provider/provider.dart';
+import 'package:restaurant_app/provider/restaurant_list_provider.dart';
+import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
+import 'home_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,71 +12,52 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late Future<RestaurantListResponse> _restaurantList;
-
   @override
   void initState() {
     super.initState();
-    _restaurantList = ApiServices().getRestaurantList();
+    Future.microtask(() {
+      context.read<RestaurantListProvider>().fetchRestaurantList();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<RestaurantListResponse>(
-        future: _restaurantList,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LottieLoading(); // Gunakan LottieLoading
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.restaurants.isEmpty) {
-            return const Center(child: Text('No restaurants found.'));
-          } else {
-            var restaurants = snapshot.data!.restaurants;
-            return ListView.builder(
-              itemCount: restaurants.length,
-              itemBuilder: (context, index) {
-                var restaurant = restaurants[index];
-                String imageUrl =
-                    ApiServices().getImageUrl(restaurant.pictureId, 'medium');
+      body: Consumer<RestaurantListProvider>(
+        builder: (context, provider, child) {
+          final state = provider.resultState;
 
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    leading: Hero(
-                      tag: 'restaurant-${restaurant.id}',
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.network(
-                          imageUrl,
-                          width: 80,
-                          height: 80,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    title: Text(restaurant.name),
-                    subtitle: Text(restaurant.city),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.star, color: Colors.orange),
-                        Text('${restaurant.rating}'),
-                      ],
-                    ),
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        NavigationRoute.detailRoute.name,
-                        arguments: restaurant.id,
-                      );
-                    },
+          if (state is RestaurantListLoadingState) {
+            return const LottieLoading();
+          } else if (state is RestaurantListErrorState) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    state.message,
+                    style: const TextStyle(color: Colors.red, fontSize: 16),
                   ),
-                );
-              },
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      provider.fetchRestaurantList();
+                    },
+                    child: const Text("Coba Lagi"),
+                  ),
+                ],
+              ),
             );
+          } else if (state is RestaurantListLoadedState) {
+            final restaurants = state.restaurants;
+            if (restaurants.isEmpty) {
+              return const Center(child: Text('No restaurants available.'));
+            }
+            return HomeList(restaurants: restaurants);
           }
+
+          // Tampilkan pesan ketika state tidak diketahui
+          return const Center(child: Text('Loading... Please wait.'));
         },
       ),
     );

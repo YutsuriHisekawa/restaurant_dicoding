@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/model/detail_restaurant.dart';
+import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 import 'package:restaurant_app/screens/detail/customer_review.dart';
 import 'package:restaurant_app/screens/detail/restaurant_category.dart';
 import 'package:restaurant_app/screens/detail/restaurant_menu.dart';
 import 'package:restaurant_app/screens/detail/restaurant_info.dart';
 
 class SliverListWidget extends StatelessWidget {
-  final DetailRestaurant restaurant;
+  final DetailRestaurantResponse restaurant;
 
   const SliverListWidget({super.key, required this.restaurant});
 

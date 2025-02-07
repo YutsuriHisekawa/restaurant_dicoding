@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/detail/sliver/sliver_list.dart';
-import 'package:restaurant_app/services/api_service.dart';
-import 'package:restaurant_app/model/detail_restaurant.dart';
-import 'package:restaurant_app/widgets/lottie_loading.dart';
+import 'package:restaurant_app/model/api_service.dart';
+import 'package:restaurant_app/model/detail_restaurant_respons.dart';
+import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 
 class BodyDetail extends StatefulWidget {
   final String restaurantId;
@@ -14,7 +14,7 @@ class BodyDetail extends StatefulWidget {
 }
 
 class _BodyDetailState extends State<BodyDetail> {
-  late Future<DetailRestaurant> _restaurantDetail;
+  late Future<DetailRestaurantResponse> _restaurantDetail;
 
   @override
   void initState() {
@@ -33,7 +33,7 @@ class _BodyDetailState extends State<BodyDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: FutureBuilder<DetailRestaurant>(
+      body: FutureBuilder<DetailRestaurantResponse>(
         future: _restaurantDetail,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

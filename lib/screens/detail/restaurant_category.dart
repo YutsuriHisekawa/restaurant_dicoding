@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/model/detail_restaurant.dart';
+import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 
 class RestaurantCategories extends StatelessWidget {
   final List<Category> categories;
@@ -11,19 +11,20 @@ class RestaurantCategories extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Categories:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          'Kategori',
+          style: Theme.of(context).textTheme.titleLarge,
         ),
+        const SizedBox(height: 8),
         Wrap(
           spacing: 8,
-          children: categories
-              .map((category) => Chip(
-                    label: Text(category.name),
-                  ))
-              .toList(),
+          runSpacing: 8,
+          children: categories.map((category) {
+            return Chip(
+              label: Text(category.name),
+            );
+          }).toList(),
         ),
-        const SizedBox(height: 16),
       ],
     );
   }

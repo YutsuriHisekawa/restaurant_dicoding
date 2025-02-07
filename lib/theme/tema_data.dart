@@ -19,13 +19,13 @@ class TemaData {
     primaryColor: Colors.deepOrange,
     scaffoldBackgroundColor: Colors.black,
     appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.deepOrange,
-      foregroundColor: Colors.white,
+      backgroundColor: Color.fromARGB(255, 22, 22, 22),
+      foregroundColor: Colors.deepOrange,
     ),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-      backgroundColor: Colors.deepOrange,
-      selectedItemColor: Colors.white,
-      unselectedItemColor: Color.fromARGB(255, 37, 37, 37),
+      backgroundColor: Color.fromARGB(255, 22, 22, 22),
+      selectedItemColor: Colors.deepOrange,
+      unselectedItemColor: Color.fromARGB(255, 53, 53, 53),
     ),
   );
 }

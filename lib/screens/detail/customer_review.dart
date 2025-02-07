@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/model/detail_restaurant.dart';
+import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 
 class CustomerReviews extends StatelessWidget {
   final List<CustomerReview> customerReviews;
@@ -11,39 +11,19 @@ class CustomerReviews extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Customer Reviews:',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Text(
+          'Ulasan Pelanggan',
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: customerReviews
-              .map((review) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        review.name,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        review.review,
-                        style: const TextStyle(fontSize: 14),
-                      ),
-                      Text(
-                        review.date,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                    ],
-                  ))
-              .toList(),
+          children: customerReviews.map((review) {
+            return ListTile(
+              title: Text(review.name),
+              subtitle: Text(review.review),
+              trailing: Text(review.date),
+            );
+          }).toList(),
         ),
       ],
     );

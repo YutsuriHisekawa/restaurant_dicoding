@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/model/detail_restaurant.dart';
+import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 
 class RestaurantInfo extends StatelessWidget {
-  final DetailRestaurant restaurant;
+  final DetailRestaurantResponse restaurant;
 
   const RestaurantInfo({super.key, required this.restaurant});
 
@@ -11,26 +11,23 @@ class RestaurantInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Restaurant Address
         Text(
-          'Address: ${restaurant.address}',
-          style: const TextStyle(fontSize: 16),
+          'Informasi Restoran',
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
-
-        // Restaurant City
         Text(
-          'City: ${restaurant.city}',
-          style: const TextStyle(fontSize: 16),
+          'Alamat: ${restaurant.address}',
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
-        const SizedBox(height: 16),
-
-        // Restaurant Description
         Text(
-          restaurant.description,
-          style: const TextStyle(fontSize: 16),
+          'Kota: ${restaurant.city}',
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
-        const SizedBox(height: 16),
+        Text(
+          'Deskripsi: ${restaurant.description}',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       ],
     );
   }

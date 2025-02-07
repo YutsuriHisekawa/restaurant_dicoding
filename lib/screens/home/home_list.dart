@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_app/model/detail_restaurant.dart';
-import 'package:restaurant_app/services/api_service.dart';
+import 'package:restaurant_app/model/restaurant.dart';
+
+import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/static/navigation_route.dart';
 
 class HomeList extends StatelessWidget {
   final List<Restaurant> restaurants;
 
-  const HomeList(
-      {super.key, required this.restaurants}); // Gunakan required parameter
+  const HomeList({super.key, required this.restaurants});
 
   @override
   Widget build(BuildContext context) {
