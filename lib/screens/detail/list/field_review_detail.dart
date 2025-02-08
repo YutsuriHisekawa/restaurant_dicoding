@@ -41,6 +41,8 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                               color: Colors.deepOrange, width: 2),
                         ),
                       ),
+                      cursorWidth: 3.0, // Set the cursor width
+                      cursorColor: Colors.deepOrange, // Set the cursor color
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Nama wajib diisi';
@@ -66,6 +68,8 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                         ),
                       ),
                       maxLines: 4,
+                      cursorWidth: 3.0,
+                      cursorColor: Colors.deepOrange,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Ulasan wajib diisi';

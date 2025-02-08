@@ -28,7 +28,7 @@ class RestaurantHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
-                color: Colors.deepOrange.withOpacity(0.3),
+                color: Colors.deepOrange.withAlpha(77),
                 blurRadius: 8,
                 offset: const Offset(2, 4),
               ),
