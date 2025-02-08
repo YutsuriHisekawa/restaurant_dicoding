@@ -17,6 +17,15 @@ class RestaurantDetailProvider extends ChangeNotifier {
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
 
+  bool _isDescriptionExpanded = false;
+  bool get isDescriptionExpanded => _isDescriptionExpanded;
+
+  bool _showFoods = false;
+  bool get showFoods => _showFoods;
+
+  bool _showDrinks = false;
+  bool get showDrinks => _showDrinks;
+
   Future<void> fetchRestaurantDetail(String restaurantId) async {
     if (_isLoading || _restaurantDetail != null) return;
 
@@ -36,6 +45,21 @@ class RestaurantDetailProvider extends ChangeNotifier {
     }
 
     _isLoading = false;
+    notifyListeners();
+  }
+
+  void toggleDescription() {
+    _isDescriptionExpanded = !_isDescriptionExpanded;
+    notifyListeners();
+  }
+
+  void toggleFoods() {
+    _showFoods = !_showFoods;
+    notifyListeners();
+  }
+
+  void toggleDrinks() {
+    _showDrinks = !_showDrinks;
     notifyListeners();
   }
 }

@@ -7,7 +7,7 @@ import 'package:restaurant_app/widgets/custom_app_bar_widget.dart';
 import 'package:restaurant_app/widgets/custom_bottom_bar_widget.dart';
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   final VoidCallback onThemeSwitch;
   final bool isDarkMode;
 
@@ -17,11 +17,6 @@ class MainScreen extends StatefulWidget {
     required this.isDarkMode,
   });
 
-  @override
-  _MainScreenState createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final int selectedIndex =
@@ -44,8 +39,8 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       appBar: CustomAppBar(
         title: appBarTitle,
-        onThemeSwitch: widget.onThemeSwitch,
-        isDarkMode: widget.isDarkMode,
+        onThemeSwitch: onThemeSwitch,
+        isDarkMode: isDarkMode,
       ),
       body: Consumer<IndexNavProvider>(
         builder: (context, value, child) {

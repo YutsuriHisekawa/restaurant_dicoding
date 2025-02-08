@@ -26,11 +26,11 @@ class HomeList extends StatelessWidget {
           child: InkWell(
             borderRadius: BorderRadius.circular(20),
             onTap: () {
-              Navigator.pushNamed(
-                context,
-                NavigationRoute.detailRoute.name,
-                arguments: restaurant.id,
-              );
+              Navigator.pushNamed(context, NavigationRoute.detailRoute.name,
+                  arguments: {
+                    'id': restaurant.id,
+                    'name': restaurant.name,
+                  });
             },
             child: Padding(
               padding: const EdgeInsets.all(12.0),
