@@ -61,10 +61,15 @@ class _BodyDetailState extends State<BodyDetail> {
                 slivers: [
                   SliverAppBar(
                     expandedHeight: 300,
-                    automaticallyImplyLeading: false,
-                    pinned: false,
+                    pinned: true,
                     floating: false,
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    backgroundColor: Colors.deepOrange,
+                    leading: IconButton(
+                        icon: const Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        color: Colors.white),
                     flexibleSpace: FlexibleSpaceBar(
                       background: Hero(
                         tag: 'restaurant-${restaurant.id}',
@@ -73,6 +78,21 @@ class _BodyDetailState extends State<BodyDetail> {
                               .getImageUrl(restaurant.pictureId, 'large'),
                           width: double.infinity,
                           fit: BoxFit.cover,
+                        ),
+                      ),
+                      title: Align(
+                        alignment: Alignment.topRight,
+                        child: Padding(
+                          padding:
+                              const EdgeInsets.only(right: 16.0, top: 45.0),
+                          child: Text(
+                            restaurant.name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
