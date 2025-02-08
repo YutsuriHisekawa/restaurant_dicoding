@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
@@ -25,8 +26,13 @@ class RestaurantDetailProvider extends ChangeNotifier {
 
     try {
       _restaurantDetail = await _apiServices.getRestaurantDetails(restaurantId);
+    } on SocketException {
+      _errorMessage =
+          "Koneksi Internet Anda telah terputus. Periksa koneksi Anda.";
+    } on HttpException {
+      _errorMessage = "Kesalahan HTTP: Gagal mengambil data.";
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = "Terjadi kesalahan: ${e.toString()}";
     }
 
     _isLoading = false;

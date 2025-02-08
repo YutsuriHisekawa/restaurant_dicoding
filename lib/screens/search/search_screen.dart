@@ -24,13 +24,18 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchChanged);
     _searchController.dispose();
     super.dispose();
   }
 
   void _onSearchChanged() {
-    final query = _searchController.text;
-    context.read<RestaurantListProvider>().searchRestaurants(query);
+    final query = _searchController.text.trim();
+    if (query.isEmpty) {
+      context.read<RestaurantListProvider>().clearSearchResults();
+    } else {
+      context.read<RestaurantListProvider>().searchRestaurants(query);
+    }
   }
 
   @override
@@ -46,8 +51,9 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Consumer<RestaurantListProvider>(
                 builder: (context, provider, child) {
                   final state = provider.resultState;
+                  final query = _searchController.text.trim();
 
-                  if (_searchController.text.isEmpty) {
+                  if (query.isEmpty) {
                     return const Center(
                       child: Text(
                         'Cari restoran...',
@@ -62,21 +68,21 @@ class _SearchScreenState extends State<SearchScreen> {
 
                   if (state is RestaurantListErrorState) {
                     return ErrorScreen(
-                      onRetry: provider.fetchRestaurantList,
+                      onRetry: () => provider.searchRestaurants(query),
                       errorMessage: state.message,
                     );
                   }
 
                   if (state is RestaurantListLoadedState) {
-                    if (provider.searchResults.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          'Tidak ada restoran yang ditemukan.',
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      );
-                    }
-                    return SearchList(searchResults: provider.searchResults);
+                    return provider.searchResults.isEmpty
+                        ? const Center(
+                            child: Text(
+                              'Tidak ada restoran yang ditemukan.',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.grey),
+                            ),
+                          )
+                        : SearchList(searchResults: provider.searchResults);
                   }
 
                   return const SizedBox();

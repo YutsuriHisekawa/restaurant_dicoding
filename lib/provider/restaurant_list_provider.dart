@@ -1,9 +1,10 @@
-import 'dart:io'; // Import for handling SocketException
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:restaurant_app/model/api_service.dart';
 
+/// **State Management untuk Daftar Restoran**
 abstract class RestaurantListResultState {}
 
 class RestaurantListNoneState extends RestaurantListResultState {}
@@ -23,7 +24,6 @@ class RestaurantListLoadedState extends RestaurantListResultState {
 class RestaurantListProvider extends ChangeNotifier {
   final ApiServices _apiServices;
   RestaurantListProvider(this._apiServices);
-
   RestaurantListResultState _resultState = RestaurantListNoneState();
   RestaurantListResultState get resultState => _resultState;
 
@@ -66,8 +66,8 @@ class RestaurantListProvider extends ChangeNotifier {
       removeFavorite(restaurant);
     } else {
       _favoriteList.add(restaurant);
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   void removeFavorite(DetailRestaurantResponse restaurant) {
@@ -79,23 +79,32 @@ class RestaurantListProvider extends ChangeNotifier {
     return _favoriteList.any((item) => item.id == restaurant.id);
   }
 
+  void clearSearchResults() {
+    _searchResults = [];
+    _resultState = RestaurantListNoneState();
+    notifyListeners();
+  }
+
   Future<void> searchRestaurants(String query) async {
+    if (query.isEmpty) {
+      clearSearchResults();
+      return;
+    }
+
     try {
-      if (query.isEmpty) {
-        _searchResults = [];
+      final result = await _apiServices.searchRestaurant(query);
+      if (result.restaurants.isEmpty) {
+        _resultState = RestaurantListErrorState("Tidak ada hasil ditemukan.");
       } else {
-        final result = await _apiServices.searchRestaurant(query);
         _searchResults = result.restaurants;
+        _resultState = RestaurantListLoadedState(_searchResults);
       }
     } on SocketException {
-      _searchResults = [];
-      notifyListeners();
-      print(
-          "Kesalahan Jaringan saat pencarian: Periksa koneksi internet Anda.");
+      _resultState = RestaurantListErrorState(
+          "Kesalahan Jaringan: Periksa koneksi internet Anda.");
     } catch (e) {
-      _searchResults = [];
-      notifyListeners();
-      print("Kesalahan saat pencarian: $e");
+      _resultState = RestaurantListErrorState("Kesalahan saat pencarian: $e");
     }
+    notifyListeners();
   }
 }

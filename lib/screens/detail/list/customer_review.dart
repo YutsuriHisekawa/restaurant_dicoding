@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/provider/detail/review_provider.dart';
-import 'package:restaurant_app/screens/detail/field_review_detail.dart';
+import 'package:restaurant_app/screens/detail/list/field_review_detail.dart';
 import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 
 class CustomerReviews extends StatelessWidget {
