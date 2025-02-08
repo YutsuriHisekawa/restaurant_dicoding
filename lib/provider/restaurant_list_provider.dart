@@ -1,3 +1,4 @@
+import 'dart:io'; // Import for handling SocketException
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 import 'package:restaurant_app/model/restaurant.dart';
@@ -37,15 +38,25 @@ class RestaurantListProvider extends ChangeNotifier {
     try {
       _resultState = RestaurantListLoadingState();
       notifyListeners();
+
       final result = await _apiServices.getRestaurantList();
+
       if (result.restaurants.isEmpty) {
-        _resultState = RestaurantListErrorState("No restaurants found.");
+        _resultState =
+            RestaurantListErrorState("Tidak ada restoran yang ditemukan.");
       } else {
         _restaurants = result.restaurants;
         _resultState = RestaurantListLoadedState(_restaurants);
       }
+    } on SocketException {
+      _resultState = RestaurantListErrorState(
+          "Koneksi Internet Anda telah terputus. Periksa koneksi Anda.");
+    } on HttpException {
+      _resultState =
+          RestaurantListErrorState("Kesalahan HTTP: Gagal mengambil data.");
     } catch (e) {
-      _resultState = RestaurantListErrorState(e.toString());
+      _resultState =
+          RestaurantListErrorState("Terjadi kesalahan: ${e.toString()}");
     }
     notifyListeners();
   }
@@ -76,9 +87,15 @@ class RestaurantListProvider extends ChangeNotifier {
         final result = await _apiServices.searchRestaurant(query);
         _searchResults = result.restaurants;
       }
+    } on SocketException {
+      _searchResults = [];
+      notifyListeners();
+      print(
+          "Kesalahan Jaringan saat pencarian: Periksa koneksi internet Anda.");
     } catch (e) {
       _searchResults = [];
+      notifyListeners();
+      print("Kesalahan saat pencarian: $e");
     }
-    notifyListeners();
   }
 }

@@ -38,13 +38,14 @@ class _DetailScreenState extends State<DetailScreen> {
             return Scaffold(
               body: ErrorScreen(
                 onRetry: () => setState(() {}),
+                errorMessage: '',
               ),
             );
           }
 
           if (!snapshot.hasData) {
             return const Scaffold(
-              body: Center(child: Text('No restaurant details found.')),
+              body: Center(child: Text('Tidak Ada Detail Restaurant')),
             );
           }
 

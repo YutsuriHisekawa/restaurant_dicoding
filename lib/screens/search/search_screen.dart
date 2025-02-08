@@ -50,7 +50,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (_searchController.text.isEmpty) {
                     return const Center(
                       child: Text(
-                        'Search for a restaurant...',
+                        'Cari restoran...',
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     );
@@ -63,6 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   if (state is RestaurantListErrorState) {
                     return ErrorScreen(
                       onRetry: provider.fetchRestaurantList,
+                      errorMessage: state.message,
                     );
                   }
 
@@ -70,7 +71,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     if (provider.searchResults.isEmpty) {
                       return const Center(
                         child: Text(
-                          'No restaurants found.',
+                          'Tidak ada restoran yang ditemukan.',
                           style: TextStyle(fontSize: 16, color: Colors.grey),
                         ),
                       );

@@ -3,8 +3,10 @@ import 'package:restaurant_app/widgets/lottie/lottie_error.dart';
 
 class ErrorScreen extends StatelessWidget {
   final VoidCallback onRetry;
+  final String errorMessage;
 
-  const ErrorScreen({super.key, required this.onRetry});
+  const ErrorScreen(
+      {super.key, required this.onRetry, required this.errorMessage});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +18,9 @@ class ErrorScreen extends StatelessWidget {
         children: [
           const LottieError(),
           const SizedBox(height: 20),
-          const Text(
-            "Oops.. Something Wrong!",
-            style: TextStyle(
+          Text(
+            errorMessage,
+            style: const TextStyle(
               color: Colors.red,
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -38,7 +40,7 @@ class ErrorScreen extends StatelessWidget {
               elevation: 5,
             ),
             child: const Text(
-              "Try Again !",
+              "Coba Lagi !",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),

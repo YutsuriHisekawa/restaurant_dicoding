@@ -73,12 +73,8 @@ class SliverListWidget extends StatelessWidget {
                   const SizedBox(height: 20),
                   RestaurantMenus(menus: restaurant.menus),
                   const SizedBox(height: 20),
-                  // Make sure to use the customerReviews from the provider
                   CustomerReviews(
-                    customerReviews:
-                        provider.restaurantDetail?.customerReviews ?? [],
-                    restaurantId: restaurant
-                        .id, // Passing the restaurantId for review submission
+                    restaurantId: restaurant.id,
                   ),
                 ],
               ),

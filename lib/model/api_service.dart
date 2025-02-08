@@ -16,7 +16,7 @@ class ApiServices {
             'Failed to load restaurant list. Status Code: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to load restaurant list: $e');
+      rethrow;
     }
   }
 
@@ -35,40 +35,48 @@ class ApiServices {
             'Failed to load restaurant details. Status Code: ${response.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to load restaurant details: $e');
+      rethrow;
     }
   }
 
   Future<RestaurantListResponse> searchRestaurant(String query) async {
-    final response = await http.get(
-      Uri.parse('https://restaurant-api.dicoding.dev/search?q=$query'),
-    );
+    try {
+      final response = await http.get(
+        Uri.parse('https://restaurant-api.dicoding.dev/search?q=$query'),
+      );
 
-    if (response.statusCode == 200) {
-      return RestaurantListResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to search restaurants');
+      if (response.statusCode == 200) {
+        return RestaurantListResponse.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to search restaurants');
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 
   Future<Map<String, dynamic>> postReview(
       String restaurantId, String name, String review) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/review'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'id': restaurantId,
-        'name': name,
-        'review': review,
-      }),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/review'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'id': restaurantId,
+          'name': name,
+          'review': review,
+        }),
+      );
 
-    if (response.statusCode == 201) {
-      return jsonDecode(response.body); 
-    } else {
-      throw Exception('Failed to post review');
+      if (response.statusCode == 201) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to post review');
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

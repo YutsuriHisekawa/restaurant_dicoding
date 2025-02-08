@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
@@ -6,7 +7,6 @@ class ReviewProvider extends ChangeNotifier {
   final ApiServices _apiServices;
   final String restaurantId;
 
-  // Initialize TextEditingControllers
   TextEditingController nameController = TextEditingController();
   TextEditingController reviewController = TextEditingController();
 
@@ -14,6 +14,9 @@ class ReviewProvider extends ChangeNotifier {
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
+
+  bool _isSubmitting = false;
+  bool get isSubmitting => _isSubmitting;
 
   String _errorMessage = '';
   String get errorMessage => _errorMessage;
@@ -29,8 +32,12 @@ class ReviewProvider extends ChangeNotifier {
     try {
       final response = await _apiServices.getRestaurantDetails(restaurantId);
       _reviews = response.restaurant.customerReviews;
+    } on SocketException {
+      _errorMessage = "Koneksi Internet anda telah terputus.";
+    } on HttpException catch (e) {
+      _errorMessage = "HTTP Error: ${e.message}";
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = "Gagal mengambil ulasan: ${e.toString()}";
     }
 
     _isLoading = false;
@@ -38,20 +45,42 @@ class ReviewProvider extends ChangeNotifier {
   }
 
   Future<void> addReview(String name, String reviewText) async {
-    if (name.isEmpty || reviewText.isEmpty) return;
+    if (name.isEmpty || reviewText.isEmpty) {
+      _errorMessage = "Nama dan ulasan tidak boleh kosong.";
+      notifyListeners();
+      return;
+    }
 
-    _isLoading = true;
+    _isSubmitting = true;
     _errorMessage = '';
     notifyListeners();
 
     try {
       await _apiServices.postReview(restaurantId, name, reviewText);
       await fetchReviews();
+      clearControllers();
+    } on SocketException {
+      _errorMessage = "Koneksi Internet anda telah terputus.";
+    } on HttpException catch (e) {
+      _errorMessage = "HTTP Error: ${e.message}";
     } catch (e) {
-      _errorMessage = e.toString();
+      _errorMessage = "Gagal mengirim ulasan: ${e.toString()}";
     }
 
-    _isLoading = false;
+    _isSubmitting = false;
     notifyListeners();
+  }
+
+  void clearControllers() {
+    nameController.clear();
+    reviewController.clear();
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    reviewController.dispose();
+    super.dispose();
   }
 }

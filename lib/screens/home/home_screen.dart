@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onRetry: () {
                 provider.fetchRestaurantList();
               },
+              errorMessage: state.message,
             );
           } else if (state is RestaurantListLoadedState) {
             final restaurants = state.restaurants;
