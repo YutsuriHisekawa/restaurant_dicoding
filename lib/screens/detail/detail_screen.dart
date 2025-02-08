@@ -8,6 +8,7 @@ import 'package:restaurant_app/widgets/favorite_icon_widget.dart';
 import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/provider/detail/restaurant_detail_provider.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
@@ -22,60 +23,63 @@ class _DetailScreenState extends State<DetailScreen> {
     final String restaurantId =
         ModalRoute.of(context)?.settings.arguments as String;
 
-    return FutureBuilder<DetailRestaurantResponse>(
-      future: ApiServices().getRestaurantDetails(restaurantId),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: LottieLoading()),
-          );
-        }
+    return ChangeNotifierProvider(
+      create: (_) => RestaurantDetailProvider(ApiServices()),
+      child: FutureBuilder<DetailRestaurantResponse>(
+        future: ApiServices().getRestaurantDetails(restaurantId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: LottieLoading()),
+            );
+          }
 
-        if (snapshot.hasError) {
+          if (snapshot.hasError) {
+            return Scaffold(
+              body: ErrorScreen(
+                onRetry: () => setState(() {}),
+              ),
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return const Scaffold(
+              body: Center(child: Text('No restaurant details found.')),
+            );
+          }
+
+          var restaurantResponse = snapshot.data!;
+          var restaurantDetail = restaurantResponse.restaurant;
+
+          var restaurant = Restaurant(
+            id: restaurantDetail.id,
+            name: restaurantDetail.name,
+            city: restaurantDetail.city,
+            rating: restaurantDetail.rating,
+            pictureId: restaurantDetail.pictureId,
+          );
+
           return Scaffold(
-            body: ErrorScreen(
-              onRetry: () => setState(() {}),
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Text(restaurantDetail.name),
+            ),
+            body: Stack(
+              children: [
+                BodyDetail(restaurantId: restaurantId),
+                Positioned(
+                  right: 20.0,
+                  bottom: 20.0,
+                  child: ChangeNotifierProvider(
+                    create: (_) => FavoriteIconProvider(),
+                    child: FavoriteIconWidget(restaurant: restaurant),
+                  ),
+                ),
+              ],
             ),
           );
-        }
-
-        if (!snapshot.hasData) {
-          return const Scaffold(
-            body: Center(child: Text('No restaurant details found.')),
-          );
-        }
-
-        var restaurantResponse = snapshot.data!;
-        var restaurantDetail = restaurantResponse.restaurant;
-
-        var restaurant = Restaurant(
-          id: restaurantDetail.id,
-          name: restaurantDetail.name,
-          city: restaurantDetail.city,
-          rating: restaurantDetail.rating,
-          pictureId: restaurantDetail.pictureId,
-        );
-
-        return Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Text(restaurantDetail.name),
-          ),
-          body: Stack(
-            children: [
-              BodyDetail(restaurantId: restaurantId),
-              Positioned(
-                right: 20.0,
-                bottom: 20.0,
-                child: ChangeNotifierProvider(
-                  create: (_) => FavoriteIconProvider(),
-                  child: FavoriteIconWidget(restaurant: restaurant),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }

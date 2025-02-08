@@ -5,6 +5,7 @@ import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 
 class ApiServices {
   static const String _baseUrl = "https://restaurant-api.dicoding.dev";
+
   Future<RestaurantListResponse> getRestaurantList() async {
     try {
       final response = await http.get(Uri.parse("$_baseUrl/list"));
@@ -47,6 +48,27 @@ class ApiServices {
       return RestaurantListResponse.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to search restaurants');
+    }
+  }
+
+  Future<Map<String, dynamic>> postReview(
+      String restaurantId, String name, String review) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/review'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'id': restaurantId,
+        'name': name,
+        'review': review,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return jsonDecode(response.body); 
+    } else {
+      throw Exception('Failed to post review');
     }
   }
 }
