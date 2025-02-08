@@ -41,10 +41,10 @@ class RestaurantListProvider extends ChangeNotifier {
   List<Restaurant> get searchResults => _searchResults;
 
   Future<void> fetchRestaurantList() async {
-    try {
-      _resultState = const RestaurantListLoadingState();
-      notifyListeners();
+    _resultState = const RestaurantListLoadingState();
+    notifyListeners();
 
+    try {
       final result = await _apiServices.getRestaurantList();
 
       if (result.restaurants.isEmpty) {
@@ -96,6 +96,9 @@ class RestaurantListProvider extends ChangeNotifier {
       clearSearchResults();
       return;
     }
+
+    _resultState = const RestaurantListLoadingState();
+    notifyListeners();
 
     try {
       final result = await _apiServices.searchRestaurant(query);

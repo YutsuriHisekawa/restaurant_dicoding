@@ -2,6 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 
+sealed class ReviewState {
+  const ReviewState();
+}
+
+final class ReviewInitialState extends ReviewState {
+  const ReviewInitialState();
+}
+
+final class ReviewLoadingState extends ReviewState {
+  const ReviewLoadingState();
+}
+
+final class ReviewErrorState extends ReviewState {
+  final String message;
+  const ReviewErrorState(this.message);
+}
+
+final class ReviewLoadedState extends ReviewState {
+  final List<CustomerReview> reviews;
+  const ReviewLoadedState(this.reviews);
+}
+
+final class ReviewSubmittingState extends ReviewState {
+  const ReviewSubmittingState();
+}
+
 class ReviewProvider extends ChangeNotifier {
   final ApiServices _apiServices;
   final String restaurantId;
@@ -9,35 +35,34 @@ class ReviewProvider extends ChangeNotifier {
   TextEditingController nameController = TextEditingController();
   TextEditingController reviewController = TextEditingController();
 
-  bool _isSubmitting = false;
-  String _errorMessage = "";
-  List<CustomerReview> _reviews = [];
-
-  bool get isSubmitting => _isSubmitting;
-  String get errorMessage => _errorMessage;
-  List<CustomerReview> get reviews => _reviews;
-  bool get isLoading => _reviews.isEmpty && !_isSubmitting;
+  ReviewState _state = const ReviewInitialState();
+  ReviewState get state => _state;
 
   ReviewProvider(this._apiServices, this.restaurantId);
 
+  bool? get isSubmitting => null;
+
   Future<void> fetchReviews() async {
+    _state = const ReviewLoadingState();
+    notifyListeners();
+
     try {
       final response = await _apiServices.getRestaurantDetails(restaurantId);
-      _reviews = response.restaurant.customerReviews;
+      _state = ReviewLoadedState(response.restaurant.customerReviews);
     } catch (e) {
-      _errorMessage = "Gagal mengambil ulasan.";
+      _state = const ReviewErrorState("Gagal mengambil ulasan.");
     }
     notifyListeners();
   }
 
   Future<void> addReview(String name, String reviewText) async {
     if (name.isEmpty || reviewText.isEmpty) {
-      _errorMessage = "Nama dan ulasan wajib diisi!";
+      _state = const ReviewErrorState("Nama dan ulasan wajib diisi!");
       notifyListeners();
       return;
     }
 
-    _isSubmitting = true;
+    _state = const ReviewSubmittingState();
     notifyListeners();
 
     try {
@@ -46,10 +71,8 @@ class ReviewProvider extends ChangeNotifier {
       nameController.clear();
       reviewController.clear();
     } catch (e) {
-      _errorMessage = "Gagal mengirim ulasan.";
+      _state = const ReviewErrorState("Gagal mengirim ulasan.");
     }
-
-    _isSubmitting = false;
     notifyListeners();
   }
 }

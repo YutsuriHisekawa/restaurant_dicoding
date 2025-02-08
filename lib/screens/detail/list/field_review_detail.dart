@@ -88,7 +88,7 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                         textStyle: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      onPressed: reviewProvider.isSubmitting
+                      onPressed: reviewProvider.state is ReviewSubmittingState
                           ? null
                           : () async {
                               if (_formKey.currentState!.validate()) {
@@ -99,19 +99,21 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
-                                      reviewProvider.errorMessage.isNotEmpty
-                                          ? reviewProvider.errorMessage
+                                      reviewProvider.state is ReviewErrorState
+                                          ? (reviewProvider.state
+                                                  as ReviewErrorState)
+                                              .message
                                           : 'Ulasan berhasil dikirim!',
                                     ),
                                     backgroundColor:
-                                        reviewProvider.errorMessage.isNotEmpty
+                                        reviewProvider.state is ReviewErrorState
                                             ? Colors.red
                                             : Colors.green,
                                   ),
                                 );
                               }
                             },
-                      child: reviewProvider.isSubmitting
+                      child: reviewProvider.state is ReviewSubmittingState
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text('Kirim Ulasan'),
                     ),

@@ -39,47 +39,62 @@ class _CustomerReviewsContent extends StatelessWidget {
             const SizedBox(height: 24),
             Consumer<ReviewProvider>(
               builder: (context, provider, child) {
-                if (provider.isLoading) {
+                if (provider.state is ReviewLoadingState) {
                   return const LottieLoading();
                 }
-                return Column(
-                  children: provider.reviews.reversed.map((review) {
-                    return Card(
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              review.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(review.review),
-                            const SizedBox(height: 8),
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                review.date,
+                if (provider.state is ReviewErrorState) {
+                  return Center(
+                    child: Text(
+                      (provider.state as ReviewErrorState).message,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
+                if (provider.state is ReviewLoadedState) {
+                  final reviews = (provider.state as ReviewLoadedState).reviews;
+                  if (reviews.isEmpty) {
+                    return const Center(child: Text('Belum ada ulasan.'));
+                  }
+                  return Column(
+                    children: reviews.reversed.map((review) {
+                      return Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                review.name,
                                 style: const TextStyle(
-                                  fontSize: 12,
-                                  fontStyle: FontStyle.italic,
-                                  color: Colors.grey,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 4),
+                              Text(review.review),
+                              const SizedBox(height: 8),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Text(
+                                  review.date,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  }).toList(),
-                );
+                      );
+                    }).toList(),
+                  );
+                }
+                return const SizedBox();
               },
             ),
           ],
