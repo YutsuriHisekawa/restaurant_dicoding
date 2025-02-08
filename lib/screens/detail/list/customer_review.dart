@@ -35,16 +35,7 @@ class _CustomerReviewsContent extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '💬 Tambahkan Ulasan',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.deepOrange,
-                  ),
-            ),
-            const SizedBox(height: 12),
             const FieldReviewDetail(),
-            const SizedBox(height: 16),
             const SizedBox(height: 24),
             Consumer<ReviewProvider>(
               builder: (context, provider, child) {
@@ -52,62 +43,42 @@ class _CustomerReviewsContent extends StatelessWidget {
                   return const LottieLoading();
                 }
                 return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '📋 Ulasan Pelanggan',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepOrange,
-                          ),
-                    ),
-                    const SizedBox(height: 12),
-                    ...provider.reviews.reversed.toList().map((review) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Card(
-                          elevation: 2,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  review.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  review.review,
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                const SizedBox(height: 8),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Text(
-                                    review.date,
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontStyle: FontStyle.italic,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ],
+                  children: provider.reviews.reversed.map((review) {
+                    return Card(
+                      elevation: 2,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              review.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 4),
+                            Text(review.review),
+                            const SizedBox(height: 8),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: Text(
+                                review.date,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  fontStyle: FontStyle.italic,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      );
-                    }).toList(),
-                  ],
+                      ),
+                    );
+                  }).toList(),
                 );
               },
             ),

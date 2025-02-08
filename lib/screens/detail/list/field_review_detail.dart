@@ -41,8 +41,7 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                               color: Colors.deepOrange, width: 2),
                         ),
                       ),
-                      cursorWidth: 3.0, 
-                      cursorColor: Colors.deepOrange, // Set the cursor color
+                      cursorColor: Colors.deepOrange,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Nama wajib diisi';
@@ -68,7 +67,6 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                         ),
                       ),
                       maxLines: 4,
-                      cursorWidth: 3.0,
                       cursorColor: Colors.deepOrange,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
@@ -98,22 +96,19 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                                   reviewProvider.nameController.text,
                                   reviewProvider.reviewController.text,
                                 );
-                                if (reviewProvider.errorMessage.isNotEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content:
-                                          Text(reviewProvider.errorMessage),
-                                      backgroundColor: Colors.red,
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      reviewProvider.errorMessage.isNotEmpty
+                                          ? reviewProvider.errorMessage
+                                          : 'Ulasan berhasil dikirim!',
                                     ),
-                                  );
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Ulasan berhasil dikirim!'),
-                                      backgroundColor: Colors.green,
-                                    ),
-                                  );
-                                }
+                                    backgroundColor:
+                                        reviewProvider.errorMessage.isNotEmpty
+                                            ? Colors.red
+                                            : Colors.green,
+                                  ),
+                                );
                               }
                             },
                       child: reviewProvider.isSubmitting

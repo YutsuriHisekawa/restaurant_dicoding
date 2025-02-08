@@ -26,90 +26,92 @@ class _BodyDetailState extends State<BodyDetail> {
         ..fetchRestaurantDetail(widget.restaurantId),
       child: Consumer<RestaurantDetailProvider>(
         builder: (context, provider, child) {
-          if (provider.isLoading) {
+          final state = provider.state;
+
+          if (state is RestaurantDetailLoading) {
             return const ShimmerLoading();
           }
 
-          if (provider.errorMessage.isNotEmpty) {
+          if (state is RestaurantDetailError) {
             return ErrorScreen(
               onRetry: () {
                 context
                     .read<RestaurantDetailProvider>()
                     .fetchRestaurantDetail(widget.restaurantId);
               },
-              errorMessage: provider.errorMessage,
+              errorMessage: state.message,
             );
           }
 
-          final restaurant = provider.restaurantDetail;
+          if (state is RestaurantDetailLoaded) {
+            final restaurant = state.restaurant;
 
-          if (restaurant == null) {
-            return const Center(child: Text('No restaurant details found.'));
-          }
+            var restaurantModel = Restaurant(
+              id: restaurant.id,
+              name: restaurant.name,
+              city: restaurant.city,
+              rating: restaurant.rating,
+              pictureId: restaurant.pictureId,
+            );
 
-          var restaurantModel = Restaurant(
-            id: restaurant.id,
-            name: restaurant.name,
-            city: restaurant.city,
-            rating: restaurant.rating,
-            pictureId: restaurant.pictureId,
-          );
-
-          return Stack(
-            children: [
-              CustomScrollView(
-                slivers: [
-                  SliverAppBar(
-                    expandedHeight: 300,
-                    pinned: true,
-                    floating: false,
-                    backgroundColor: Colors.deepOrange,
-                    leading: IconButton(
+            return Stack(
+              children: [
+                CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      expandedHeight: 300,
+                      pinned: true,
+                      floating: false,
+                      backgroundColor: Colors.deepOrange,
+                      leading: IconButton(
                         icon: const Icon(Icons.arrow_back),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        color: Colors.white),
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Hero(
-                        tag: 'restaurant-${restaurant.id}',
-                        child: Image.network(
-                          ApiServices()
-                              .getImageUrl(restaurant.pictureId, 'large'),
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
+                        color: Colors.white,
                       ),
-                      title: Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding:
-                              const EdgeInsets.only(right: 16.0, top: 45.0),
-                          child: Text(
-                            restaurant.name,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
-                              color: Colors.white,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Hero(
+                          tag: 'restaurant-${restaurant.id}',
+                          child: Image.network(
+                            ApiServices()
+                                .getImageUrl(restaurant.pictureId, 'large'),
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        title: Align(
+                          alignment: Alignment.bottomRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 16.0),
+                            child: Text(
+                              restaurant.name,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  SliverListWidget(restaurant: restaurant),
-                ],
-              ),
-              Positioned(
-                right: 20.0,
-                bottom: 20.0,
-                child: ChangeNotifierProvider(
-                  create: (_) => FavoriteIconProvider(),
-                  child: FavoriteIconWidget(restaurant: restaurantModel),
+                    SliverListWidget(restaurant: restaurant),
+                  ],
                 ),
-              ),
-            ],
-          );
+                Positioned(
+                  right: 20.0,
+                  bottom: 20.0,
+                  child: ChangeNotifierProvider(
+                    create: (_) => FavoriteIconProvider(),
+                    child: FavoriteIconWidget(restaurant: restaurantModel),
+                  ),
+                ),
+              ],
+            );
+          }
+
+          return const Center(child: Text('No restaurant details found.'));
         },
       ),
     );

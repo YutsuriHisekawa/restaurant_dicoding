@@ -4,27 +4,33 @@ import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 import 'package:restaurant_app/model/api_service.dart';
 
-/// **State Management untuk Daftar Restoran**
-abstract class RestaurantListResultState {}
-
-class RestaurantListNoneState extends RestaurantListResultState {}
-
-class RestaurantListLoadingState extends RestaurantListResultState {}
-
-class RestaurantListErrorState extends RestaurantListResultState {
-  final String message;
-  RestaurantListErrorState(this.message);
+sealed class RestaurantListResultState {
+  const RestaurantListResultState();
 }
 
-class RestaurantListLoadedState extends RestaurantListResultState {
+final class RestaurantListNoneState extends RestaurantListResultState {
+  const RestaurantListNoneState();
+}
+
+final class RestaurantListLoadingState extends RestaurantListResultState {
+  const RestaurantListLoadingState();
+}
+
+final class RestaurantListErrorState extends RestaurantListResultState {
+  final String message;
+  const RestaurantListErrorState(this.message);
+}
+
+final class RestaurantListLoadedState extends RestaurantListResultState {
   final List<Restaurant> restaurants;
-  RestaurantListLoadedState(this.restaurants);
+  const RestaurantListLoadedState(this.restaurants);
 }
 
 class RestaurantListProvider extends ChangeNotifier {
   final ApiServices _apiServices;
   RestaurantListProvider(this._apiServices);
-  RestaurantListResultState _resultState = RestaurantListNoneState();
+
+  RestaurantListResultState _resultState = const RestaurantListNoneState();
   RestaurantListResultState get resultState => _resultState;
 
   final List<DetailRestaurantResponse> _favoriteList = [];
@@ -36,24 +42,24 @@ class RestaurantListProvider extends ChangeNotifier {
 
   Future<void> fetchRestaurantList() async {
     try {
-      _resultState = RestaurantListLoadingState();
+      _resultState = const RestaurantListLoadingState();
       notifyListeners();
 
       final result = await _apiServices.getRestaurantList();
 
       if (result.restaurants.isEmpty) {
-        _resultState =
-            RestaurantListErrorState("Tidak ada restoran yang ditemukan.");
+        _resultState = const RestaurantListErrorState(
+            "Tidak ada restoran yang ditemukan.");
       } else {
         _restaurants = result.restaurants;
         _resultState = RestaurantListLoadedState(_restaurants);
       }
     } on SocketException {
-      _resultState = RestaurantListErrorState(
+      _resultState = const RestaurantListErrorState(
           "Koneksi Internet Anda telah terputus. Periksa koneksi Anda.");
     } on HttpException {
-      _resultState =
-          RestaurantListErrorState("Kesalahan HTTP: Gagal mengambil data.");
+      _resultState = const RestaurantListErrorState(
+          "Kesalahan HTTP: Gagal mengambil data.");
     } catch (e) {
       _resultState =
           RestaurantListErrorState("Terjadi kesalahan: ${e.toString()}");
@@ -81,7 +87,7 @@ class RestaurantListProvider extends ChangeNotifier {
 
   void clearSearchResults() {
     _searchResults = [];
-    _resultState = RestaurantListNoneState();
+    _resultState = const RestaurantListNoneState();
     notifyListeners();
   }
 
@@ -94,13 +100,14 @@ class RestaurantListProvider extends ChangeNotifier {
     try {
       final result = await _apiServices.searchRestaurant(query);
       if (result.restaurants.isEmpty) {
-        _resultState = RestaurantListErrorState("Tidak ada hasil ditemukan.");
+        _resultState =
+            const RestaurantListErrorState("Tidak ada hasil ditemukan.");
       } else {
         _searchResults = result.restaurants;
         _resultState = RestaurantListLoadedState(_searchResults);
       }
     } on SocketException {
-      _resultState = RestaurantListErrorState(
+      _resultState = const RestaurantListErrorState(
           "Kesalahan Jaringan: Periksa koneksi internet Anda.");
     } catch (e) {
       _resultState = RestaurantListErrorState("Kesalahan saat pencarian: $e");

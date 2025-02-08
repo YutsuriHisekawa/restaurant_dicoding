@@ -3,19 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/model/detail_restaurant_respons.dart';
 
+sealed class RestaurantDetailState {}
+
+class RestaurantDetailInitial extends RestaurantDetailState {}
+
+class RestaurantDetailLoading extends RestaurantDetailState {}
+
+class RestaurantDetailLoaded extends RestaurantDetailState {
+  final DetailRestaurantResponse restaurant;
+  RestaurantDetailLoaded(this.restaurant);
+}
+
+class RestaurantDetailError extends RestaurantDetailState {
+  final String message;
+  RestaurantDetailError(this.message);
+}
+
 class RestaurantDetailProvider extends ChangeNotifier {
   final ApiServices _apiServices;
-
   RestaurantDetailProvider(this._apiServices);
 
-  DetailRestaurantResponse? _restaurantDetail;
-  DetailRestaurantResponse? get restaurantDetail => _restaurantDetail;
-
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
-  String _errorMessage = '';
-  String get errorMessage => _errorMessage;
+  RestaurantDetailState _state = RestaurantDetailInitial();
+  RestaurantDetailState get state => _state;
 
   bool _isDescriptionExpanded = false;
   bool get isDescriptionExpanded => _isDescriptionExpanded;
@@ -27,24 +36,24 @@ class RestaurantDetailProvider extends ChangeNotifier {
   bool get showDrinks => _showDrinks;
 
   Future<void> fetchRestaurantDetail(String restaurantId) async {
-    if (_isLoading || _restaurantDetail != null) return;
+    if (_state is RestaurantDetailLoading || _state is RestaurantDetailLoaded)
+      return;
 
-    _isLoading = true;
-    _errorMessage = '';
+    _state = RestaurantDetailLoading();
     notifyListeners();
 
     try {
-      _restaurantDetail = await _apiServices.getRestaurantDetails(restaurantId);
+      final restaurant = await _apiServices.getRestaurantDetails(restaurantId);
+      _state = RestaurantDetailLoaded(restaurant);
     } on SocketException {
-      _errorMessage =
-          "Koneksi Internet Anda telah terputus. Periksa koneksi Anda.";
+      _state = RestaurantDetailError(
+          "Koneksi Internet Anda terputus. Periksa koneksi Anda.");
     } on HttpException {
-      _errorMessage = "Kesalahan HTTP: Gagal mengambil data.";
+      _state = RestaurantDetailError("Kesalahan HTTP: Gagal mengambil data.");
     } catch (e) {
-      _errorMessage = "Terjadi kesalahan: ${e.toString()}";
+      _state = RestaurantDetailError("Terjadi kesalahan: ${e.toString()}");
     }
 
-    _isLoading = false;
     notifyListeners();
   }
 
