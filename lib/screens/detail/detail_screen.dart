@@ -9,12 +9,8 @@ class DetailScreen extends StatelessWidget {
     final arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     final String restaurantId = arguments['id'] ?? '';
-    // final String restaurantName = arguments['name'] ?? 'Restaurant Details';
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(restaurantName),
-      // ),
       body: BodyDetail(restaurantId: restaurantId),
     );
   }

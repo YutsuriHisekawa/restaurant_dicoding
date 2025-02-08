@@ -41,7 +41,7 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
                               color: Colors.deepOrange, width: 2),
                         ),
                       ),
-                      cursorWidth: 3.0, // Set the cursor width
+                      cursorWidth: 3.0, 
                       cursorColor: Colors.deepOrange, // Set the cursor color
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
