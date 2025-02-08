@@ -13,7 +13,7 @@ class RestaurantCategories extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
