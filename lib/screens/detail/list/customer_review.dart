@@ -7,6 +7,7 @@ import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 
 class CustomerReviews extends StatelessWidget {
   final String restaurantId;
+
   const CustomerReviews({super.key, required this.restaurantId});
 
   @override
@@ -51,47 +52,104 @@ class _CustomerReviewsContent extends StatelessWidget {
                   );
                 }
                 if (provider.state is ReviewLoadedState) {
-                  final reviews = (provider.state as ReviewLoadedState).reviews;
+                  final reviews = (provider.state as ReviewLoadedState)
+                      .reviews
+                      .reversed
+                      .toList();
+
                   if (reviews.isEmpty) {
-                    return const Center(child: Text('Belum ada ulasan.'));
-                  }
-                  return Column(
-                    children: reviews.reversed.map((review) {
-                      return Card(
-                        elevation: 2,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                    return const Center(
+                      child: Text(
+                        'Belum ada ulasan.',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontStyle: FontStyle.italic,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: [
+                      ...reviews.take(provider.displayedReviews).map((review) {
+                        return Card(
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          margin: const EdgeInsets.only(bottom: 12),
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor:
+                                    Colors.deepOrange.withOpacity(0.2),
+                                child: Text(
+                                  review.name[0].toUpperCase(),
+                                  style: const TextStyle(
+                                    color: Colors.deepOrange,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              title: Text(
                                 review.name,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              Text(review.review),
-                              const SizedBox(height: 8),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Text(
-                                  review.date,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.grey,
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    review.review,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
                                   ),
-                                ),
+                                  const SizedBox(height: 8),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: Text(
+                                      review.date,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontStyle: FontStyle.italic,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
+                          ),
+                        );
+                      }),
+                      if (provider.displayedReviews < reviews.length)
+                        Center(
+                          child: ElevatedButton(
+                            onPressed: () => provider.loadMoreReviews(reviews),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.deepOrange,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
+                            ),
+                            child: const Text(
+                              'Muat Lebih Banyak',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
-                      );
-                    }).toList(),
+                    ],
                   );
                 }
                 return const SizedBox();

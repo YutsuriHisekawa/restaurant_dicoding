@@ -6,9 +6,8 @@ class DetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final arguments =
-        ModalRoute.of(context)?.settings.arguments as Map<String, String>;
-    final String restaurantId = arguments['id'] ?? '';
+    final String restaurantId =
+        ModalRoute.of(context)?.settings.arguments as String;
 
     return Scaffold(
       body: BodyDetail(restaurantId: restaurantId),

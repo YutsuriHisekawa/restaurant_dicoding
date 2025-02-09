@@ -1,4 +1,4 @@
-import 'restaurant.dart'; 
+import 'restaurant.dart';
 
 class RestaurantListResponse {
   final List<Restaurant> restaurants;

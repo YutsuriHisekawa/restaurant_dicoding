@@ -37,10 +37,10 @@ class ReviewProvider extends ChangeNotifier {
 
   ReviewState _state = const ReviewInitialState();
   ReviewState get state => _state;
+  int _displayedReviews = 5;
+  int get displayedReviews => _displayedReviews;
 
   ReviewProvider(this._apiServices, this.restaurantId);
-
-  bool? get isSubmitting => null;
 
   Future<void> fetchReviews() async {
     _state = const ReviewLoadingState();
@@ -73,6 +73,11 @@ class ReviewProvider extends ChangeNotifier {
     } catch (e) {
       _state = const ReviewErrorState("Gagal mengirim ulasan.");
     }
+    notifyListeners();
+  }
+
+  void loadMoreReviews(List<CustomerReview> allReviews) {
+    _displayedReviews = (_displayedReviews + 5).clamp(0, allReviews.length);
     notifyListeners();
   }
 }

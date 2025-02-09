@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/api_service.dart';
 import 'package:restaurant_app/provider/detail/restaurant_detail_provider.dart';
+import 'package:restaurant_app/screens/detail/list/sliver_app_bar.dart';
 import 'package:restaurant_app/screens/detail/list/sliver_list.dart';
 import 'package:restaurant_app/widgets/shimer/shimer_loading.dart';
 import 'package:provider/provider.dart';
@@ -58,44 +59,7 @@ class _BodyDetailState extends State<BodyDetail> {
               children: [
                 CustomScrollView(
                   slivers: [
-                    SliverAppBar(
-                      expandedHeight: 300,
-                      pinned: true,
-                      floating: false,
-                      backgroundColor: Colors.deepOrange,
-                      leading: IconButton(
-                        icon: const Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        color: Colors.white,
-                      ),
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Hero(
-                          tag: 'restaurant-${restaurant.id}',
-                          child: Image.network(
-                            ApiServices()
-                                .getImageUrl(restaurant.pictureId, 'large'),
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        title: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
-                            child: Text(
-                              restaurant.name,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 24,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    CustomSliverAppBar(restaurant: restaurantModel),
                     SliverListWidget(restaurant: restaurant),
                   ],
                 ),

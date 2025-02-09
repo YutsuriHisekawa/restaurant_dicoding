@@ -21,6 +21,15 @@ class _FieldReviewDetailState extends State<FieldReviewDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              '🗨️ Customer Review',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.deepOrange,
+              ),
+            ),
+            const SizedBox(height: 16),
             Consumer<ReviewProvider>(
               builder: (context, reviewProvider, child) {
                 return Column(

@@ -48,22 +48,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Restaurant App',
-      themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      theme: TemaData.lightTheme,
-      darkTheme: TemaData.darkTheme,
-      initialRoute: NavigationRoute.mainRoute.name,
-      routes: {
-        NavigationRoute.mainRoute.name: (context) => MainScreen(
-              onThemeSwitch: themeProvider.toggleTheme,
-              isDarkMode: themeProvider.isDarkMode,
-            ),
-        NavigationRoute.detailRoute.name: (context) => const DetailScreen(),
-        '/favorite': (context) => const FavoriteScreen(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Restaurant App',
+          themeMode:
+              themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          theme: TemaData.lightTheme,
+          darkTheme: TemaData.darkTheme,
+          initialRoute: NavigationRoute.mainRoute.name,
+          routes: {
+            NavigationRoute.mainRoute.name: (context) => MainScreen(
+                  onThemeSwitch: themeProvider.toggleTheme,
+                  isDarkMode: themeProvider.isDarkMode,
+                ),
+            NavigationRoute.detailRoute.name: (context) => const DetailScreen(),
+            '/favorite': (context) => const FavoriteScreen(),
+          },
+        );
       },
     );
   }
