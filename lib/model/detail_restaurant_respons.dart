@@ -22,7 +22,7 @@ class DetailRestaurantResponse {
   String get description => restaurant.description;
   double get rating => restaurant.rating;
   List<Category> get categories => restaurant.categories;
-  Menus get menus => restaurant.menus;
+  Menus get menu => restaurant.menu;
   List<CustomerReview> get customerReviews => restaurant.customerReviews;
   String get id => restaurant.id;
   String get pictureId => restaurant.pictureId;
@@ -38,7 +38,7 @@ class RestaurantDetail {
   final String pictureId;
   final double rating;
   final List<Category> categories;
-  final Menus menus;
+  final Menus menu;
   final List<CustomerReview> customerReviews;
 
   RestaurantDetail({
@@ -50,7 +50,7 @@ class RestaurantDetail {
     required this.pictureId,
     required this.rating,
     required this.categories,
-    required this.menus,
+    required this.menu,
     required this.customerReviews,
   });
 
@@ -66,7 +66,7 @@ class RestaurantDetail {
       categories: (json['categories'] as List)
           .map((category) => Category.fromJson(category))
           .toList(),
-      menus: Menus.fromJson(json['menus']),
+      menu: Menus.fromJson(json['menus']),
       customerReviews: (json['customerReviews'] as List)
           .map((review) => CustomerReview.fromJson(review))
           .toList(),

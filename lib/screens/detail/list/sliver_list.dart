@@ -30,7 +30,7 @@ class SliverListWidget extends StatelessWidget {
                   const SizedBox(height: 20),
                   RestaurantCategories(categories: restaurant.categories),
                   const SizedBox(height: 20),
-                  RestaurantMenus(menus: restaurant.menus),
+                  RestaurantMenus(menus: restaurant.menu),
                   const SizedBox(height: 20),
                   CustomerReviews(
                     restaurantId: restaurant.id,
