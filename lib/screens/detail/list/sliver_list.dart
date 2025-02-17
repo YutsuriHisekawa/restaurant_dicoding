@@ -6,7 +6,7 @@ import 'package:restaurant_app/screens/detail/list/restaurant_info.dart';
 import 'package:restaurant_app/screens/detail/list/restaurant_header.dart';
 import 'package:restaurant_app/screens/detail/list/customer_review.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/provider/detail/restaurant_detail_provider.dart';
+import 'package:restaurant_app/screens/provider/detail/restaurant_detail_provider.dart';
 
 class SliverListWidget extends StatelessWidget {
   final DetailRestaurantResponse restaurant;

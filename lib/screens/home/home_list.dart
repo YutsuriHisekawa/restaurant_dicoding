@@ -15,7 +15,7 @@ class HomeList extends StatelessWidget {
       itemBuilder: (context, index) {
         var restaurant = restaurants[index];
         String imageUrl =
-            ApiServices().getImageUrl(restaurant.pictureId, 'medium');
+            ApiServices().getImageUrl(restaurant.pictureId!, 'medium');
 
         return Card(
           margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
@@ -55,7 +55,7 @@ class HomeList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          restaurant.name,
+                          restaurant.name!,
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -72,7 +72,7 @@ class HomeList extends StatelessWidget {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              restaurant.city,
+                              restaurant.city!,
                               style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 14,

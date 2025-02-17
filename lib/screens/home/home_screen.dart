@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/provider/restaurant_list_provider.dart';
+import 'package:restaurant_app/screens/provider/restaurant_list_provider.dart';
 import 'package:restaurant_app/screens/error/error_screen.dart';
 import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 import 'home_list.dart';

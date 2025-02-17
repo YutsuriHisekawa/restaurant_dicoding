@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/model/api_service.dart';
-import 'package:restaurant_app/provider/detail/restaurant_detail_provider.dart';
+import 'package:restaurant_app/screens/provider/detail/restaurant_detail_provider.dart';
 import 'package:restaurant_app/screens/detail/list/sliver_app_bar.dart';
 import 'package:restaurant_app/screens/detail/list/sliver_list.dart';
 import 'package:restaurant_app/widgets/shimer/shimer_loading.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/screens/error/error_screen.dart';
 import 'package:restaurant_app/widgets/favorite_icon_widget.dart';
-import 'package:restaurant_app/provider/detail/favorite_icon_provider.dart';
+import 'package:restaurant_app/screens/provider/favorite/favorite_icon_provider.dart';
 import 'package:restaurant_app/model/restaurant.dart';
 
 class BodyDetail extends StatefulWidget {

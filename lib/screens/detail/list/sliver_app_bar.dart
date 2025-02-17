@@ -25,7 +25,7 @@ class CustomSliverAppBar extends StatelessWidget {
         background: Hero(
           tag: 'restaurant-${restaurant.id}',
           child: Image.network(
-            ApiServices().getImageUrl(restaurant.pictureId, 'large'),
+            ApiServices().getImageUrl(restaurant.pictureId!, 'large'),
             width: double.infinity,
             fit: BoxFit.cover,
           ),
@@ -35,7 +35,7 @@ class CustomSliverAppBar extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Text(
-              restaurant.name,
+              restaurant.name!,
               textAlign: TextAlign.end,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,

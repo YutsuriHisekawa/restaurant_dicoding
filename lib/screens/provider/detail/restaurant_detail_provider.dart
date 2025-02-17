@@ -36,8 +36,9 @@ class RestaurantDetailProvider extends ChangeNotifier {
   bool get showDrinks => _showDrinks;
 
   Future<void> fetchRestaurantDetail(String restaurantId) async {
-    if (_state is RestaurantDetailLoading || _state is RestaurantDetailLoaded)
+    if (_state is RestaurantDetailLoading || _state is RestaurantDetailLoaded) {
       return;
+    }
 
     _state = RestaurantDetailLoading();
     notifyListeners();

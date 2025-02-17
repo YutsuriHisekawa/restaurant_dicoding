@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:restaurant_app/provider/detail/review_provider.dart';
+import 'package:restaurant_app/screens/provider/detail/review_provider.dart';
 
 class FieldReviewDetail extends StatefulWidget {
   const FieldReviewDetail({super.key});
