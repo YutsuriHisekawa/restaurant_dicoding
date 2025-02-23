@@ -52,6 +52,15 @@ class NotifTestButton extends StatelessWidget {
                   ),
                 ),
                 onPressed: () async {
+                  final bool hasPermission =
+                      await reminderProvider.requestNotificationPermission();
+
+                  if (!hasPermission) {
+                    // Tampilkan pop-up untuk meminta izin notifikasi
+                    _showPermissionDialog(context);
+                    return;
+                  }
+
                   await _showSimpleTestNotification(context, reminderProvider);
                 },
               ),
@@ -70,6 +79,7 @@ class NotifTestButton extends StatelessWidget {
         'Simple Test Notifications',
         importance: Importance.max,
         priority: Priority.high,
+        // Biarkan suara default sistem digunakan
       ),
     );
 
@@ -82,8 +92,42 @@ class NotifTestButton extends StatelessWidget {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-          backgroundColor: Colors.green,
-          content: Text('Simple Test notification sent!')),
+        backgroundColor: Colors.green,
+        content: Text('Simple Test notification sent!'),
+      ),
+    );
+  }
+
+  void _showPermissionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Izin Notifikasi Diperlukan'),
+        content: const Text(
+            'Aktifkan notifikasi di pengaturan sistem untuk mengirim notifikasi.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Tutup'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              final bool hasPermission =
+                  await ReminderNotifProvider().requestNotificationPermission();
+              if (!hasPermission) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Izinkan notifikasi terlebih dahulu!'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: const Text('Buka Pengaturan'),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -75,7 +75,7 @@ class LocalNotificationService {
       channelName,
       importance: Importance.max,
       priority: Priority.high,
-      sound: const RawResourceAndroidNotificationSound('notification'),
+      // Biarkan suara default sistem digunakan
     );
 
     final notificationDetails = NotificationDetails(
