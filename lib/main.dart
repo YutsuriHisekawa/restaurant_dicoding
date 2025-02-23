@@ -15,12 +15,17 @@ import 'package:restaurant_app/screens/main/main_screen.dart';
 import 'package:restaurant_app/screens/favorite/favorite_screen.dart';
 import 'package:restaurant_app/service/local_notificaion_service.dart';
 import 'package:restaurant_app/service/http_service.dart';
+import 'package:restaurant_app/screens/provider/notification/reminder_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final LocalNotificationService notificationService =
       LocalNotificationService(HttpService());
   await notificationService.init();
+
+  final reminderProvider = ReminderNotifProvider();
+  await reminderProvider.loadSettings();
 
   runApp(
     MultiProvider(
@@ -50,7 +55,7 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        // Add the LocalNotificationService to the providers list
+        ChangeNotifierProvider(create: (_) => reminderProvider),
         Provider<LocalNotificationService>.value(value: notificationService),
       ],
       child: const MyApp(),
