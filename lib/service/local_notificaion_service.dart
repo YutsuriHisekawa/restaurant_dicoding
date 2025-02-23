@@ -37,6 +37,17 @@ class LocalNotificationService {
     );
   }
 
+  Future<bool?> requestPermissions() async {
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      final notificationEnabled = await _isAndroidPermissionGranted();
+      if (!notificationEnabled) {
+        return await _requestAndroidNotificationsPermission();
+      }
+      return notificationEnabled;
+    }
+    return false;
+  }
+
   Future<bool> _isAndroidPermissionGranted() async {
     final androidPlugin =
         flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
@@ -49,28 +60,6 @@ class LocalNotificationService {
         flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>();
     return await androidPlugin?.requestNotificationsPermission() ?? false;
-  }
-
-  Future<bool?> requestPermissions() async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      final notificationEnabled = await _isAndroidPermissionGranted();
-      if (!notificationEnabled) {
-        return await _requestAndroidNotificationsPermission();
-      }
-      return notificationEnabled;
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final iOSPlugin =
-          flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>();
-      if (iOSPlugin != null) {
-        return await iOSPlugin.requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
-      }
-    }
-    return false;
   }
 
   Future<void> showNotification({
@@ -86,7 +75,7 @@ class LocalNotificationService {
       channelName,
       importance: Importance.max,
       priority: Priority.high,
-      sound: const RawResourceAndroidNotificationSound('slow_spring_board'),
+      sound: const RawResourceAndroidNotificationSound('notification'),
     );
 
     final notificationDetails = NotificationDetails(
@@ -131,6 +120,7 @@ class LocalNotificationService {
       priority: Priority.high,
       largeIcon: FilePathAndroidBitmap(largeIconPath),
       styleInformation: bigPictureStyleInformation,
+      sound: const RawResourceAndroidNotificationSound('notification'),
     );
 
     final notificationDetails = NotificationDetails(
@@ -168,6 +158,7 @@ class LocalNotificationService {
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
+      sound: const RawResourceAndroidNotificationSound('notification'),
     );
 
     final notificationDetails = NotificationDetails(

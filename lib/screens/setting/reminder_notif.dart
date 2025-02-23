@@ -5,7 +5,6 @@ class ReminderNotif extends StatelessWidget {
   final TimeOfDay selectedTime;
   final Function(bool) onReminderToggle;
   final VoidCallback onTimePickerTap;
-  final VoidCallback onTestNotification;
 
   const ReminderNotif({
     Key? key,
@@ -13,7 +12,6 @@ class ReminderNotif extends StatelessWidget {
     required this.selectedTime,
     required this.onReminderToggle,
     required this.onTimePickerTap,
-    required this.onTestNotification,
   }) : super(key: key);
 
   @override
@@ -38,24 +36,25 @@ class ReminderNotif extends StatelessWidget {
               'Pilih Waktu Reminder',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            subtitle: Text(
-              selectedTime.format(context),
-              style: TextStyle(fontSize: 16),
+            subtitle: GestureDetector(
+              onTap: onTimePickerTap, // When tapped, show the time picker
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.deepOrange),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  selectedTime.format(context), // Display selected time
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.deepOrange,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-            trailing: Icon(Icons.access_time, color: Colors.deepOrange),
-            onTap: onTimePickerTap,
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: onTestNotification,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            ),
-            child: const Text(
-              'Test Notification',
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
+            trailing: const Icon(Icons.access_time, color: Colors.deepOrange),
           ),
         ],
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/screens/provider/notification/reminder_provider.dart';
+import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 import 'reminder_notif.dart';
 
 class SettingScreen extends StatelessWidget {
@@ -11,14 +11,12 @@ class SettingScreen extends StatelessWidget {
       future: Provider.of<ReminderNotifProvider>(context, listen: false)
           .loadSettings(),
       builder: (context, snapshot) {
-        // Jika sedang memuat data, tampilkan loading indicator
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: LottieLoading(),
           );
         }
 
-        // Jika selesai memuat atau ada error, tampilkan ReminderNotif
         if (snapshot.hasError) {
           return Scaffold(
             body: Center(child: Text('Terjadi kesalahan: ${snapshot.error}')),
@@ -56,21 +54,6 @@ class SettingScreen extends StatelessWidget {
               if (pickedTime != null) {
                 reminderProvider.updateReminderTime(pickedTime);
               }
-            },
-            onTestNotification: () async {
-              await reminderProvider.flutterLocalNotificationsPlugin.show(
-                1,
-                'Test Notification',
-                'Ini adalah notifikasi percobaan!',
-                const NotificationDetails(
-                  android: AndroidNotificationDetails(
-                    'test_notification_channel',
-                    'Test Notification',
-                    importance: Importance.max,
-                    priority: Priority.high,
-                  ),
-                ),
-              );
             },
           ),
         );
