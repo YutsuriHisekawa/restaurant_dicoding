@@ -8,6 +8,8 @@ import 'package:restaurant_app/service/local_notificaion_service.dart';
 class ReminderNotifProvider with ChangeNotifier {
   bool _isReminderEnabled = false;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 11, minute: 0);
+  String _notificationTitle = 'Pengingat Makan';
+  String _notificationBody = 'Jangan lupa makan!';
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   final LocalNotificationService _notificationService =
@@ -15,6 +17,8 @@ class ReminderNotifProvider with ChangeNotifier {
 
   bool get isReminderEnabled => _isReminderEnabled;
   TimeOfDay get selectedTime => _selectedTime;
+  String get notificationTitle => _notificationTitle;
+  String get notificationBody => _notificationBody;
 
   Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
@@ -23,6 +27,10 @@ class ReminderNotifProvider with ChangeNotifier {
       hour: prefs.getInt('reminder_hour') ?? _selectedTime.hour,
       minute: prefs.getInt('reminder_minute') ?? _selectedTime.minute,
     );
+    _notificationTitle =
+        prefs.getString('notification_title') ?? 'Pengingat Makan';
+    _notificationBody =
+        prefs.getString('notification_body') ?? 'Jangan lupa makan!';
 
     if (_isReminderEnabled) {
       await _scheduleNotification(_selectedTime);
@@ -35,6 +43,8 @@ class ReminderNotifProvider with ChangeNotifier {
     prefs.setBool('daily_reminder', _isReminderEnabled);
     prefs.setInt('reminder_hour', _selectedTime.hour);
     prefs.setInt('reminder_minute', _selectedTime.minute);
+    prefs.setString('notification_title', _notificationTitle);
+    prefs.setString('notification_body', _notificationBody);
   }
 
   Future<bool> requestNotificationPermission() async {
@@ -71,8 +81,8 @@ class ReminderNotifProvider with ChangeNotifier {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
-      'Reminder',
-      'Jangan lupa makan!',
+      _notificationTitle, // Gunakan judul custom
+      _notificationBody, // Gunakan deskripsi custom
       scheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
@@ -110,9 +120,19 @@ class ReminderNotifProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Update the reminder time
   Future<void> updateReminderTime(TimeOfDay time) async {
     _selectedTime = time;
+    await saveSettings();
+
+    if (_isReminderEnabled) {
+      await _scheduleNotification(_selectedTime);
+    }
+    notifyListeners();
+  }
+
+  Future<void> updateNotificationDetails(String title, String body) async {
+    _notificationTitle = title;
+    _notificationBody = body;
     await saveSettings();
 
     if (_isReminderEnabled) {

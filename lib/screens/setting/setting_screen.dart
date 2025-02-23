@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:restaurant_app/screens/provider/notification/reminder_provider.dart';
+import 'package:restaurant_app/screens/setting/reminder_notif.dart';
 import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
-import 'reminder_notif.dart';
+import 'package:restaurant_app/screens/setting/notif_test.dart';
+import 'package:provider/provider.dart';
 
 class SettingScreen extends StatelessWidget {
   @override
@@ -23,38 +24,24 @@ class SettingScreen extends StatelessWidget {
           );
         }
 
-        final reminderProvider = Provider.of<ReminderNotifProvider>(context);
-        return Scaffold(
-          body: ReminderNotif(
-            isReminderEnabled: reminderProvider.isReminderEnabled,
-            selectedTime: reminderProvider.selectedTime,
-            onReminderToggle: (value) async {
-              final bool hasPermission =
-                  await reminderProvider.requestNotificationPermission();
+        Provider.of<ReminderNotifProvider>(context);
 
-              if (!hasPermission) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text(
-                        '🚫 Izin notifikasi ditolak! Aktifkan notifikasi di pengaturan.'),
-                    duration: Duration(seconds: 3),
-                  ),
-                );
-                return;
-              }
+        return const Scaffold(
+          body: SingleChildScrollView(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ReminderNotif Widget
+                Card(
+                  elevation: 4,
+                  margin: EdgeInsets.only(bottom: 20),
+                  child: ReminderNotif(),
+                ),
 
-              reminderProvider.updateReminderStatus(value);
-            },
-            onTimePickerTap: () async {
-              final TimeOfDay? pickedTime = await showTimePicker(
-                context: context,
-                initialTime: reminderProvider.selectedTime,
-              );
-
-              if (pickedTime != null) {
-                reminderProvider.updateReminderTime(pickedTime);
-              }
-            },
+                NotifTestButton(),
+              ],
+            ),
           ),
         );
       },
