@@ -56,8 +56,7 @@ class NotifTestButton extends StatelessWidget {
                       await reminderProvider.requestNotificationPermission();
 
                   if (!hasPermission) {
-                    // Tampilkan pop-up untuk meminta izin notifikasi
-                    _showPermissionDialog(context);
+                    _showPermissionSnackbar(context);
                     return;
                   }
 
@@ -98,35 +97,13 @@ class NotifTestButton extends StatelessWidget {
     );
   }
 
-  void _showPermissionDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Izin Notifikasi Diperlukan'),
-        content: const Text(
-            'Aktifkan notifikasi di pengaturan sistem untuk mengirim notifikasi.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Tutup'),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              final bool hasPermission =
-                  await ReminderNotifProvider().requestNotificationPermission();
-              if (!hasPermission) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Izinkan notifikasi terlebih dahulu!'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              }
-            },
-            child: const Text('Buka Pengaturan'),
-          ),
-        ],
+  void _showPermissionSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+            'Izin notifikasi diperlukan. Aktifkan di pengaturan sistem untuk melanjutkan.'),
+        duration: Duration(seconds: 1),
       ),
     );
   }

@@ -76,7 +76,7 @@ class ReminderNotifProvider with ChangeNotifier {
     );
 
     if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(Duration(days: 1));
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
 
     await flutterLocalNotificationsPlugin.zonedSchedule(

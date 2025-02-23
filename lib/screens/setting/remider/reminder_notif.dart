@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/screens/provider/notification/reminder_provider.dart';
+import 'reminder_textfield.dart';
 
 class ReminderNotif extends StatelessWidget {
-  const ReminderNotif({
-    Key? key,
-  }) : super(key: key);
+  const ReminderNotif({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,28 +58,20 @@ class ReminderNotif extends StatelessWidget {
             activeColor: Colors.deepOrange,
           ),
           const SizedBox(height: 16),
-          TextField(
-            controller:
-                TextEditingController(text: reminderProvider.notificationTitle),
-            decoration: const InputDecoration(
-              labelText: 'Judul Notifikasi',
-              hintText: 'Contoh: Waktunya Makan!',
-              border: OutlineInputBorder(),
-            ),
+          ReminderTextField(
+            labelText: 'Judul Notifikasi',
+            hintText: 'Contoh: Waktunya Makan!',
+            initialValue: reminderProvider.notificationTitle,
             onChanged: (value) {
               reminderProvider.updateNotificationDetails(
                   value, reminderProvider.notificationBody);
             },
           ),
           const SizedBox(height: 16),
-          TextField(
-            controller:
-                TextEditingController(text: reminderProvider.notificationBody),
-            decoration: const InputDecoration(
-              labelText: 'Deskripsi Notifikasi',
-              hintText: 'Contoh: Jangan lupa makan siang ya!',
-              border: OutlineInputBorder(),
-            ),
+          ReminderTextField(
+            labelText: 'Deskripsi Notifikasi',
+            hintText: 'Contoh: Jangan lupa makan siang ya!',
+            initialValue: reminderProvider.notificationBody,
             onChanged: (value) {
               reminderProvider.updateNotificationDetails(
                   reminderProvider.notificationTitle, value);
@@ -131,7 +122,6 @@ class ReminderNotif extends StatelessWidget {
                   reminderProvider.notificationBody,
                 );
 
-                // Show SnackBar when the reminder is successfully saved
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     backgroundColor: Colors.green,

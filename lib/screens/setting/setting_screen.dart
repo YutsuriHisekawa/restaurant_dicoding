@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_app/screens/provider/notification/reminder_provider.dart';
-import 'package:restaurant_app/screens/setting/reminder_notif.dart';
+import 'package:restaurant_app/screens/setting/remider/reminder_notif.dart';
 import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 import 'package:restaurant_app/screens/setting/notif_test.dart';
 import 'package:provider/provider.dart';
 
 class SettingScreen extends StatelessWidget {
+  const SettingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -24,8 +26,7 @@ class SettingScreen extends StatelessWidget {
           );
         }
 
-        Provider.of<ReminderNotifProvider>(context);
-
+        // Tidak perlu lagi memanggil `Provider.of` di sini, karena sudah ada di dalam builder.
         return const Scaffold(
           body: SingleChildScrollView(
             padding: EdgeInsets.all(16.0),
@@ -38,7 +39,6 @@ class SettingScreen extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 20),
                   child: ReminderNotif(),
                 ),
-
                 NotifTestButton(),
               ],
             ),
