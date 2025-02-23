@@ -13,8 +13,15 @@ import 'package:restaurant_app/static/navigation_route.dart';
 import 'package:restaurant_app/theme/tema_data.dart';
 import 'package:restaurant_app/screens/main/main_screen.dart';
 import 'package:restaurant_app/screens/favorite/favorite_screen.dart';
+import 'package:restaurant_app/service/local_notificaion_service.dart';
+import 'package:restaurant_app/service/http_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final LocalNotificationService notificationService =
+      LocalNotificationService(HttpService());
+  await notificationService.init();
+
   runApp(
     MultiProvider(
       providers: [
@@ -43,6 +50,8 @@ void main() {
           ),
         ),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        // Add the LocalNotificationService to the providers list
+        Provider<LocalNotificationService>.value(value: notificationService),
       ],
       child: const MyApp(),
     ),

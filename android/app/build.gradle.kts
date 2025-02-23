@@ -11,9 +11,13 @@ android {
     ndkVersion = "28.0.13004108"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+    isCoreLibraryDesugaringEnabled = true
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.2.2")
+}
 
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
@@ -38,6 +42,7 @@ android {
         }
     }
 }
+
 
 flutter {
     source = "../.."

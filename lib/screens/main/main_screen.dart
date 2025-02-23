@@ -3,6 +3,7 @@ import 'package:restaurant_app/screens/favorite/favorite_screen.dart';
 import 'package:restaurant_app/screens/home/home_screen.dart';
 import 'package:restaurant_app/screens/search/search_screen.dart';
 import 'package:restaurant_app/screens/main/index_nav_provider.dart';
+import 'package:restaurant_app/screens/setting/setting_screen.dart';
 import 'package:restaurant_app/widgets/custom_app_bar_widget.dart';
 import 'package:restaurant_app/widgets/custom_bottom_bar_widget.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,9 @@ class MainScreen extends StatelessWidget {
       case 2:
         appBarTitle = 'Search Restaurant';
         break;
+      case 3:
+        appBarTitle = 'Setting';
+        break;
       default:
         appBarTitle = 'Restaurant App';
     }
@@ -48,6 +52,8 @@ class MainScreen extends StatelessWidget {
             return const FavoriteScreen();
           } else if (value.indexBottomNavBar == 2) {
             return const SearchScreen();
+          } else if (value.indexBottomNavBar == 3) {
+            return SettingScreen();
           } else {
             return const HomeScreen();
           }

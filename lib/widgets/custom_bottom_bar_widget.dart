@@ -38,6 +38,14 @@ class CustomBottomBar extends StatelessWidget {
           colors: [Colors.orange, Colors.deepOrange],
         ),
       ),
+      const TabData(
+        title: 'Setting',
+        iconData: Icons.settings,
+        tabColor: Colors.deepOrange,
+        tabGradient: LinearGradient(
+          colors: [Colors.orange, Colors.deepOrange],
+        ),
+      ),
     ];
 
     return CubertoBottomBar(
