@@ -19,7 +19,7 @@ class LocalNotificationService {
 
   Future<void> init() async {
     const initializationSettingsAndroid = AndroidInitializationSettings(
-      'app_icon', // Ensure this name matches the file name in the drawable folder
+      'app_icon',
     );
 
     const initializationSettings = InitializationSettings(
