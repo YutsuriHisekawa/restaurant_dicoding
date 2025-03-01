@@ -16,6 +16,7 @@ import 'package:restaurant_app/screens/favorite/favorite_screen.dart';
 import 'package:restaurant_app/service/local_notificaion_service.dart';
 import 'package:restaurant_app/service/http_service.dart';
 import 'package:restaurant_app/screens/provider/notification/reminder_provider.dart';
+import 'package:restaurant_app/service/workmanager_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +58,9 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => reminderProvider),
         Provider<LocalNotificationService>.value(value: notificationService),
+        Provider(
+          create: (context) => WorkmanagerService()..init(),
+        ),
       ],
       child: const MyApp(),
     ),
