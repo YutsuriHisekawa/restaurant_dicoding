@@ -27,35 +27,23 @@ class SettingScreen extends StatelessWidget {
           );
         }
 
-        // Tidak perlu lagi memanggil `Provider.of` di sini, karena sudah ada di dalam builder.
-        return Scaffold(
+        return const Scaffold(
           body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ReminderNotif Widget
-                const Card(
+                Card(
                   elevation: 4,
                   margin: EdgeInsets.only(bottom: 20),
                   child: ReminderNotif(),
                 ),
+                // WorkmanagerNotifButton Widget
+                WorkmanagerNotifToggle(),
 
                 // NotifTestButton Widget
                 NotifTestButton(),
-
-                // Button untuk Navigasi ke WorkmanagerNotif
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WorkmanagerNotif(),
-                      ),
-                    );
-                  },
-                  child: const Text("Test WorkManager Notifications"),
-                ),
               ],
             ),
           ),

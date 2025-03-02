@@ -32,4 +32,6 @@ class Restaurant {
       pictureId: json['pictureId'] as String,
     );
   }
+
+  get description => null;
 }
