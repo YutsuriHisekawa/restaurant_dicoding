@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:restaurant_app/screens/provider/notification/reminder_provider.dart';
-import 'package:restaurant_app/screens/setting/remider/reminder_notif.dart';
 import 'package:restaurant_app/screens/setting/workmanager/workmanager_notif.dart';
 import 'package:restaurant_app/widgets/lottie/lottie_loading.dart';
 import 'package:restaurant_app/screens/setting/notif_test.dart';
@@ -34,11 +33,7 @@ class SettingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // ReminderNotif Widget
-                Card(
-                  elevation: 4,
-                  margin: EdgeInsets.only(bottom: 20),
-                  child: ReminderNotif(),
-                ),
+
                 // WorkmanagerNotifButton Widget
                 WorkmanagerNotifToggle(),
 
