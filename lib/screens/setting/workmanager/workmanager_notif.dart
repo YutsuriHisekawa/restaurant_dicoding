@@ -31,7 +31,6 @@ class _WorkmanagerNotifToggleState extends State<WorkmanagerNotifToggle> {
     _flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (details) async {
-        // Handle notification tap
         final restaurantId = details.payload;
         if (restaurantId != null) {
           Navigator.pushNamed(

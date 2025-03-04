@@ -10,7 +10,6 @@ void callbackDispatcher() {
       FlutterLocalNotificationsPlugin();
 
   Workmanager().executeTask((task, inputData) async {
-    // Initialize notifications
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const InitializationSettings initializationSettings =
@@ -18,21 +17,16 @@ void callbackDispatcher() {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     if (task == MyWorkmanager.oneOff.taskName ||
-        task == MyWorkmanager.oneOff.uniqueName ||
-        task == Workmanager.iOSBackgroundTask) {
+        task == MyWorkmanager.oneOff.uniqueName) {
       print("inputData: $inputData");
     } else if (task == MyWorkmanager.periodic.taskName) {
       try {
-        // Panggil API untuk mendapatkan daftar restoran
         final apiService = ApiServices();
         final restaurantListResponse = await apiService.getRestaurantList();
 
-        // Pilih restoran acak dari daftar
         final random = Random();
         final randomRestaurant = restaurantListResponse.restaurants[
             random.nextInt(restaurantListResponse.restaurants.length)];
-
-        // Kirim notifikasi dengan detail restoran
         await flutterLocalNotificationsPlugin.show(
           0,
           "Restaurant Rekomendasi Hari Ini",
@@ -53,7 +47,6 @@ void callbackDispatcher() {
       }
     }
 
-    // Jadwalkan ulang tugas satu kali setelah selesai
     final workmanagerService = WorkmanagerService();
     await workmanagerService.runOneOffTask();
 
@@ -78,7 +71,7 @@ class WorkmanagerService {
       constraints: Constraints(
         networkType: NetworkType.connected,
       ),
-      initialDelay: const Duration(seconds: 5), // Penundaan 5 detik
+      initialDelay: const Duration(seconds: 5),
       inputData: {
         "data": "This is a valid payload from oneoff task workmanager",
       },

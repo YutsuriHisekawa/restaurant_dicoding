@@ -55,7 +55,7 @@ class MainScreen extends StatelessWidget {
           } else if (value.indexBottomNavBar == 3) {
             return const SettingScreen();
           } else {
-            return const HomeScreen();
+            return HomeScreen();
           }
         },
       ),
